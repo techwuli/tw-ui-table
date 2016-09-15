@@ -1,0 +1,55 @@
+@color-black-12: rgba(0,0,0,.12);
+@color-black-87: rgba(0,0,0,.87);
+@color-black-54: rgba(0,0,0,.54);
+@color-white: #FFF;
+
+tw-ui-table {
+    font-family: 'Roboto', sans-serif;
+
+    table {
+        width: 100%;
+        background-color: @color-white;
+        border-collapse: collapse;
+
+        td,
+        th {
+            text-align: left;
+
+            &.numeric {
+                text-align: right;
+            }
+        }
+
+        tr{
+            border-width: 0 0 1px 0;
+            border-style: solid;
+            border-color: @color-black-12;
+        }
+
+        thead {
+            font-size: 12px;
+            font-weight: 500;
+            color: @color-black-54;
+        }
+
+        tbody {
+            font-size: 13px;
+            color: @color-black-87;
+
+            tr {
+                &:hover{
+                    background-color: #EEE;
+                }
+
+                &.selected{
+                    background-color: #F5F5F5;
+                }
+            }
+        }
+
+        md-checkbox .md-icon{
+            width: 18px;
+            height: 18px;
+        }
+    }
+}

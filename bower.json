@@ -1,0 +1,19 @@
+{
+  "name": "tw-ui-table",
+  "description": "Data table implements the Material Design",
+  "main": "tw-ui-table.js",
+  "authors": [
+    "Zhao Yu <seal8216@hotmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "material",
+    "angular",
+    "table"
+  ],
+  "homepage": "",
+  "dependencies": {
+    "angular": "^1.5.8",
+    "angular-material": "^1.1.1"
+  }
+}

@@ -1,0 +1,19 @@
+<table>
+    <thead>
+        <tr>
+            <th class="selection-column" ng-if="selectable"></th>
+            <th ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.display}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="item in data">
+            <td ng-if="selectable" class="selection-column">
+                <md-checkbox ng-checked="item.selected" ng-click="item.selected=!item.selected"/>
+            </td>
+            <td ng-repeat="column in columns" ng-class="{'numeric':column.numeric}">
+                {{item[column.name]}}
+            </td>
+        </tr>
+    </tbody>
+</table>
+{{data}}
