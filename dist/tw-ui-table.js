@@ -28,7 +28,8 @@
                 scope: {
                     data: '=',
                     columns: '=',
-                    selectable: '='
+                    selectable: '=',
+                    selectedItems:'=?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'

@@ -1,10 +1,17 @@
+@color-black-6: rgba(0,0,0,.06);
 @color-black-12: rgba(0,0,0,.12);
 @color-black-87: rgba(0,0,0,.87);
 @color-black-54: rgba(0,0,0,.54);
 @color-white: #FFF;
+@font-weight-regular: 400;
+@font-weight-medium: 500;
 
 tw-ui-table {
     font-family: 'Roboto', sans-serif;
+
+    selection-column {
+      padding-left: 24px;
+    }
 
     table {
         width: 100%;
@@ -20,34 +27,40 @@ tw-ui-table {
             }
         }
 
-        tr{
+        tr {
             border-width: 0 0 1px 0;
             border-style: solid;
-            border-color: @color-black-12;
+            border-color: @color-black-6;
         }
 
         thead {
             font-size: 12px;
-            font-weight: 500;
+            font-weight: @font-weight-medium;
             color: @color-black-54;
+            tr{
+              height: 56px;
+
+            }
         }
 
         tbody {
             font-size: 13px;
             color: @color-black-87;
+            font-weight: @font-weight-regular;
 
             tr {
-                &:hover{
+              height: 48px;
+                &:hover {
                     background-color: #EEE;
                 }
 
-                &.selected{
+                &.selected {
                     background-color: #F5F5F5;
                 }
             }
         }
 
-        md-checkbox .md-icon{
+        md-checkbox .md-icon {
             width: 18px;
             height: 18px;
         }

@@ -2,18 +2,21 @@
     <thead>
         <tr>
             <th class="selection-column" ng-if="selectable"></th>
-            <th ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.display}}</th>
+            <th ng-class="{'numeric':column.numeric}"
+            ng-repeat="column in columns">{{column.display}}</th>
         </tr>
     </thead>
     <tbody>
-        <tr ng-repeat="item in data">
+        <tr ng-class="{'selected':isItemSelected(item)}" ng-repeat="item in data">
             <td ng-if="selectable" class="selection-column">
-                <md-checkbox ng-checked="item.selected" ng-click="item.selected=!item.selected"/>
+                <md-checkbox ng-checked="isItemSelected(item)"
+                ng-click="toggleItemSelected(item)"/>
             </td>
-            <td ng-repeat="column in columns" ng-class="{'numeric':column.numeric}">
+            <td ng-repeat="column in columns"
+            ng-class="{'numeric':column.numeric}">
                 {{item[column.name]}}
             </td>
         </tr>
     </tbody>
 </table>
-{{data}}
+{{selectedItems}}
