@@ -9,8 +9,8 @@
 tw-ui-table {
     font-family: 'Roboto', sans-serif;
 
-    selection-column {
-      padding-left: 24px;
+    md-checkbox {
+        margin-bottom: 0;
     }
 
     table {
@@ -25,6 +25,35 @@ tw-ui-table {
             &.numeric {
                 text-align: right;
             }
+
+            &:first-child {
+                padding-left: 24px;
+            }
+
+            &:last-child {
+                padding-right: 24px;
+            }
+
+            &:not(:first-child) {
+                padding-left: 56px;
+            }
+
+            md-checkbox {
+                width: 20px;
+            }
+        }
+
+        &.selectable {
+            td,
+            th {
+                &:first-child {
+                    width: 20px;
+                }
+
+                &:nth-child(2) {
+                    padding-left: 24px;
+                }
+            }
         }
 
         tr {
@@ -37,9 +66,9 @@ tw-ui-table {
             font-size: 12px;
             font-weight: @font-weight-medium;
             color: @color-black-54;
-            tr{
-              height: 56px;
 
+            tr {
+                height: 56px;
             }
         }
 
@@ -49,7 +78,10 @@ tw-ui-table {
             font-weight: @font-weight-regular;
 
             tr {
-              height: 48px;
+                height: 48px;
+                outline: none;
+
+                &.selected:hover,
                 &:hover {
                     background-color: #EEE;
                 }
@@ -57,12 +89,11 @@ tw-ui-table {
                 &.selected {
                     background-color: #F5F5F5;
                 }
-            }
-        }
 
-        md-checkbox .md-icon {
-            width: 18px;
-            height: 18px;
+                &.clickable {
+                    cursor: pointer;
+                }
+            }
         }
     }
 }

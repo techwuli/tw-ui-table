@@ -19,7 +19,8 @@
                     name: 'Zhao Yu',
                     gender: 'Male',
                     age: 34,
-                    phone: '18680858642'
+                    phone: '18680858642',
+                    date: new Date()
                 }, {
                     name: 'Chen Min',
                     gender: 'Female',
@@ -46,6 +47,10 @@
                     display: 'Age',
                     name: 'age',
                     numeric: true
+                }, {
+                    display: 'Date',
+                    name: 'date',
+                    numeric: true
                 }];
 
                 $scope.columns = [];
@@ -69,6 +74,10 @@
                         name: 'age',
                         numeric: true
                     });
+                };
+
+                $scope.onItemClicked = function(item) {
+                    console.log(item);
                 };
 
                 initTable();

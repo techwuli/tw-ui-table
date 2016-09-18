@@ -7,6 +7,7 @@
                 function($scope) {
 
                     $scope.selectedItems = $scope.selectedItems || [];
+                    $scope.selectOnClick = $scope.selectOnClick || false;
 
                     $scope.isItemSelected = function(item) {
                         return $scope.selectedItems.indexOf(item) > -1;
@@ -20,6 +21,16 @@
                             $scope.selectedItems.push(item);
                         }
                     };
+
+                    $scope.onItemClicked = function(item) {
+                        if ($scope.selectOnClick) {
+                            $scope.selectedItems = [item];
+                        }
+
+                        if ($scope.itemClicked) {
+                            $scope.itemClicked(item);
+                        }
+                    };
                 }
             ];
 
@@ -29,7 +40,9 @@
                     data: '=',
                     columns: '=',
                     selectable: '=',
-                    selectedItems:'=?'
+                    selectedItems: '=?',
+                    itemClicked: '=?',
+                    selectOnClick: '=?'                    
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'
