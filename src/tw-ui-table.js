@@ -3,9 +3,9 @@
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', function() {
             var controller = [
-                '$scope',
-                function($scope) {
-
+                '$scope', '$filter',
+                function($scope, $filter) {
+                    $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
                     $scope.selectOnClick = $scope.selectOnClick || false;
 
@@ -31,6 +31,36 @@
                             $scope.itemClicked(item);
                         }
                     };
+
+                    $scope.getCellText = function(item, column) {
+
+                        if (!column) {
+                            throw 'column definition is not defined.';
+                        }
+
+                        if (!column.path) {
+                            throw 'path must be set, in: ' + column;
+                        }
+
+                        var paths = column.path.split('.');
+                        var pathIndex = 0;
+                        var columnValue = item;
+                        while (pathIndex < paths.length && columnValue) {
+                            columnValue = columnValue[paths[pathIndex]];
+                            pathIndex++;
+                        }
+
+                        if (!columnValue) {
+                            return '';
+                        }
+
+                        if (column.dataType === 'date') {
+                            var format = column.dateFormat || $scope.defaultDateFormat;
+                            columnValue = $filter('date')(new Date(columnValue), format);
+                        }
+
+                        return columnValue;
+                    };
                 }
             ];
 
@@ -42,7 +72,8 @@
                     selectable: '=',
                     selectedItems: '=?',
                     itemClicked: '=?',
-                    selectOnClick: '=?'                    
+                    selectOnClick: '=?',
+                    defaultDateFormat: '@?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'

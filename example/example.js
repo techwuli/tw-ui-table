@@ -19,13 +19,17 @@
                     name: 'Zhao Yu',
                     gender: 'Male',
                     age: 34,
-                    phone: '18680858642',
-                    date: new Date()
+                    phone: '876776565',
+                    date: new Date(),
+                    work: {
+                        company: 'Techwuli',
+                        title: 'Senior Developer'
+                    }
                 }, {
                     name: 'Chen Min',
                     gender: 'Female',
                     age: 30,
-                    phone: '18696750011'
+                    phone: '909876556'
                 }, {
                     name: 'Zhao Yunze',
                     gender: 'Male',
@@ -33,24 +37,29 @@
                 }];
 
                 var allColumns = [{
-                    display: 'Name',
-                    name: 'name',
+                    title: 'Name',
+                    path: 'name',
                     alwaysShow: true
                 }, {
-                    display: 'Gender',
-                    name: 'gender'
+                    title: 'Gender',
+                    path: 'gender'
                 }, {
-                    display: 'Phone',
-                    name: 'phone',
+                    title: 'Phone',
+                    path: 'phone',
                     numeric: true
                 }, {
-                    display: 'Age',
-                    name: 'age',
+                    title: 'Age',
+                    path: 'age',
                     numeric: true
                 }, {
-                    display: 'Date',
-                    name: 'date',
-                    numeric: true
+                    title: 'Date',
+                    path: 'date',
+                    numeric: true,
+                    dataType: 'date',
+                    dateFormat:'MM/dd/yyyy HH:mm:ss'
+                }, {
+                    title: 'Work',
+                    path: 'work.title'
                 }];
 
                 $scope.columns = [];
@@ -62,7 +71,7 @@
 
                 $scope.addData = function() {
                     $scope.data.push({
-                        name: 'Yu Qiyong',
+                        name: 'Yu Qiying',
                         gender: 'Female',
                         age: 58
                     });
