@@ -80,6 +80,10 @@
                 $scope.onItemClicked = function(item) {
                     console.log(item);
                 };
+
+                $scope.toggleHeader = function() {
+                    $scope.hideHeader = !$scope.hideHeader;
+                };
             }
         ]);
 })();

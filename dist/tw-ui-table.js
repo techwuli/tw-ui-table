@@ -74,10 +74,11 @@
                     itemClicked: '=?',
                     selectOnClick: '=?',
                     defaultDateFormat: '@?',
-                    compact:'=?'
+                    compact:'=?',
+                    hideHeader:'='
                 },
                 controller: controller,
-                template: '<table ng-class=\"{\'selectable\':selectable}\"><thead><tr><th ng-if=\"selectable\"></th><th ng-if=\"!compact||!column.optional\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\">{{column.title}}</th></tr></thead><tbody><tr ng-click=\"onItemClicked(item)\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-repeat=\"item in data\"><td ng-if=\"selectable\"><md-checkbox ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"!compact||!column.optional\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\">{{getCellText(item, column)}}</td></tr></tbody></table>'
+                template: '<table ng-class=\"{\'selectable\':selectable}\"><thead ng-if=\"!hideHeader\"><tr><th ng-if=\"selectable\"></th><th ng-if=\"!compact||!column.optional\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\">{{column.title}}</th></tr></thead><tbody><tr ng-click=\"onItemClicked(item)\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-repeat=\"item in data\"><td ng-if=\"selectable\"><md-checkbox ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"!compact||!column.optional\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\">{{getCellText(item, column)}}</td></tr></tbody></table>'
             };
         });
 })();

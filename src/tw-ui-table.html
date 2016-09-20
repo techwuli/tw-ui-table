@@ -1,5 +1,5 @@
 <table ng-class="{'selectable':selectable}">
-    <thead>
+    <thead ng-if="!hideHeader">
         <tr>
             <th ng-if="selectable"></th>
             <th ng-if="!compact||!column.optional" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.title}}</th>

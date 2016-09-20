@@ -74,7 +74,8 @@
                     itemClicked: '=?',
                     selectOnClick: '=?',
                     defaultDateFormat: '@?',
-                    compact:'=?'
+                    compact:'=?',
+                    hideHeader:'='
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'
