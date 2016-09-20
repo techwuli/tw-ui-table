@@ -2,7 +2,7 @@
     <thead>
         <tr>
             <th ng-if="selectable"></th>
-            <th ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.title}}</th>
+            <th ng-if="!compact||!column.optional" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.title}}</th>
         </tr>
     </thead>
     <tbody>
@@ -10,7 +10,7 @@
             <td ng-if="selectable">
                 <md-checkbox ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)"/>
             </td>
-            <td ng-repeat="column in columns" ng-class="{'numeric':column.numeric}">
+            <td ng-if="!compact||!column.optional" ng-repeat="column in columns" ng-class="{'numeric':column.numeric}">
                 {{getCellText(item, column)}}
             </td>
         </tr>

@@ -5,15 +5,7 @@
             '$scope',
             function($scope) {
 
-                var showSimpleTable = false;
-                var initTable = function() {
-                    $scope.columns = [];
-                    for (var i = 0; i < allColumns.length; i++) {
-                        if (allColumns[i].alwaysShow || !showSimpleTable) {
-                            $scope.columns.push(allColumns[i]);
-                        }
-                    }
-                };
+                $scope.compact = false;
 
                 $scope.data = [{
                     name: 'Zhao Yu',
@@ -36,37 +28,37 @@
                     age: 4
                 }];
 
-                var allColumns = [{
+                $scope.columns = [{
                     title: 'Name',
-                    path: 'name',
-                    alwaysShow: true
+                    path: 'name'
                 }, {
                     title: 'Gender',
                     path: 'gender'
                 }, {
                     title: 'Phone',
                     path: 'phone',
-                    numeric: true
+                    numeric: true,
+                    optional: true
                 }, {
                     title: 'Age',
                     path: 'age',
-                    numeric: true
+                    numeric: true,
+                    optional: true
                 }, {
                     title: 'Date',
                     path: 'date',
                     numeric: true,
                     dataType: 'date',
-                    dateFormat:'MM/dd/yyyy HH:mm:ss'
+                    dateFormat: 'MM/dd/yyyy HH:mm:ss',
+                    optional: true
                 }, {
                     title: 'Work',
-                    path: 'work.title'
+                    path: 'work.title',
+                    optional: true
                 }];
 
-                $scope.columns = [];
-
                 $scope.switch = function() {
-                    showSimpleTable = !showSimpleTable;
-                    initTable();
+                    $scope.compact = !$scope.compact;
                 };
 
                 $scope.addData = function() {
@@ -88,8 +80,6 @@
                 $scope.onItemClicked = function(item) {
                     console.log(item);
                 };
-
-                initTable();
             }
         ]);
 })();
