@@ -3,8 +3,8 @@
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', function() {
             var controller = [
-                '$scope', '$filter',
-                function($scope, $filter) {
+                '$scope', '$filter','$mdDialog',
+                function($scope, $filter, $mdDialog) {
                     $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
                     $scope.selectOnClick = $scope.selectOnClick || false;
@@ -30,6 +30,16 @@
                         if ($scope.itemClicked) {
                             $scope.itemClicked(item);
                         }
+                    };
+
+                    $scope.showTooltip = function(ev, text) {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .targetEvent(ev)
+                            .clickOutsideToClose(true)
+                            .textContent(text)
+                            .ok('close')
+                        );
                     };
 
                     $scope.getCellText = function(item, column) {
@@ -78,7 +88,7 @@
                     hideHeader:'='
                 },
                 controller: controller,
-                template: '<table ng-class=\"{\'selectable\':selectable}\"><thead ng-if=\"!hideHeader\"><tr><th ng-if=\"selectable\"></th><th ng-if=\"!compact||!column.optional\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\">{{column.title}}</th></tr></thead><tbody><tr ng-click=\"onItemClicked(item)\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-repeat=\"item in data\"><td ng-if=\"selectable\"><md-checkbox ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"!compact||!column.optional\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\">{{getCellText(item, column)}}</td></tr></tbody></table>'
+                template: '<table ng-class=\"{\'selectable\':selectable}\"><thead ng-if=\"!hideHeader\"><tr><th ng-if=\"selectable\"></th><th ng-if=\"!compact||!column.optional\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\">{{column.title}}</th></tr></thead><tbody><tr ng-click=\"onItemClicked(item)\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-repeat=\"item in data\"><td ng-if=\"selectable\"><md-checkbox ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"!compact||!column.optional\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\"><span ng-if=\"!column.tooltipPath||!item[column.tooltipPath]\">{{getCellText(item, column)}}</span> <span ng-if=\"column.tooltipPath && item[column.tooltipPath]\" ng-click=\"showTooltip($event, item[column.tooltipPath])\" class=\"has-tooltip\">{{getCellText(item, column)}}</span></td></tr></tbody></table>'
             };
         });
 })();

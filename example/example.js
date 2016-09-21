@@ -33,7 +33,8 @@
                     path: 'name'
                 }, {
                     title: 'Gender',
-                    path: 'gender'
+                    path: 'gender',
+                    tooltipPath: 'phone'
                 }, {
                     title: 'Phone',
                     path: 'phone',
@@ -83,7 +84,7 @@
 
                 $scope.toggleHeader = function() {
                     $scope.hideHeader = !$scope.hideHeader;
-                };
+                };                
             }
         ]);
 })();

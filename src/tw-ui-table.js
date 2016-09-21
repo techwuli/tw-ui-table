@@ -3,8 +3,8 @@
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', function() {
             var controller = [
-                '$scope', '$filter',
-                function($scope, $filter) {
+                '$scope', '$filter','$mdDialog',
+                function($scope, $filter, $mdDialog) {
                     $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
                     $scope.selectOnClick = $scope.selectOnClick || false;
@@ -30,6 +30,16 @@
                         if ($scope.itemClicked) {
                             $scope.itemClicked(item);
                         }
+                    };
+
+                    $scope.showTooltip = function(ev, text) {
+                        $mdDialog.show(
+                            $mdDialog.alert()
+                            .targetEvent(ev)
+                            .clickOutsideToClose(true)
+                            .textContent(text)
+                            .ok('close')
+                        );
                     };
 
                     $scope.getCellText = function(item, column) {
