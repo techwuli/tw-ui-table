@@ -10,8 +10,8 @@
                     $scope.selectOnClick = $scope.selectOnClick || false;
 
                     var onSelectionChanged = function() {
-                        if (selectionChanged) {
-                            selectionChanged();
+                        if ($scope.selectionChanged) {
+                            $scope.selectionChanged();
                         }
                     };
 

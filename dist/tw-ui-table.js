@@ -3,11 +3,17 @@
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', function() {
             var controller = [
-                '$scope', '$filter','$mdDialog',
+                '$scope', '$filter', '$mdDialog',
                 function($scope, $filter, $mdDialog) {
                     $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
                     $scope.selectOnClick = $scope.selectOnClick || false;
+
+                    var onSelectionChanged = function() {
+                        if ($scope.selectionChanged) {
+                            $scope.selectionChanged();
+                        }
+                    };
 
                     $scope.isItemSelected = function(item) {
                         return $scope.selectedItems.indexOf(item) > -1;
@@ -20,11 +26,13 @@
                         } else {
                             $scope.selectedItems.push(item);
                         }
+                        onSelectionChanged();
                     };
 
                     $scope.onItemClicked = function(item) {
                         if ($scope.selectOnClick) {
                             $scope.selectedItems = [item];
+                            onSelectionChanged();
                         }
 
                         if ($scope.itemClicked) {
@@ -81,11 +89,12 @@
                     columns: '=',
                     selectable: '=',
                     selectedItems: '=?',
+                    selectionChanged: '=?',
                     itemClicked: '=?',
                     selectOnClick: '=?',
                     defaultDateFormat: '@?',
-                    compact:'=?',
-                    hideHeader:'='
+                    compact: '=?',
+                    hideHeader: '='
                 },
                 controller: controller,
                 template: '<table ng-class=\"{\'selectable\':selectable}\"><thead ng-if=\"!hideHeader\"><tr><th ng-if=\"selectable\"></th><th ng-if=\"!compact||!column.optional\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\">{{column.title}}</th></tr></thead><tbody><tr ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-repeat=\"item in data\"><td ng-if=\"selectable\"><md-checkbox ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"!compact||!column.optional\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\" ng-click=\"onItemClicked(item)\"><span ng-if=\"!column.tooltipPath||!item[column.tooltipPath]\">{{getCellText(item, column)}}</span> <span ng-if=\"column.tooltipPath && item[column.tooltipPath]\" ng-click=\"showTooltip($event, item[column.tooltipPath])\" class=\"has-tooltip\">{{getCellText(item, column)}}</span></td></tr></tbody></table>'

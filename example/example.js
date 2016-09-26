@@ -89,6 +89,10 @@
                 $scope.showItemInConsole = function(item) {
                     console.log(item);
                 };
+
+                $scope.checkSelections = function() {
+                    console.log('checking selections');
+                };
             }
         ]);
 })();
