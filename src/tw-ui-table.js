@@ -15,6 +15,8 @@
                         }
                     };
 
+                    $scope.$watchCollection('selectedItems', onSelectionChanged);
+
                     $scope.isItemSelected = function(item) {
                         return $scope.selectedItems.indexOf(item) > -1;
                     };
@@ -26,13 +28,11 @@
                         } else {
                             $scope.selectedItems.push(item);
                         }
-                        onSelectionChanged();
                     };
 
                     $scope.onItemClicked = function(item) {
                         if ($scope.selectOnClick) {
                             $scope.selectedItems = [item];
-                            onSelectionChanged();
                         }
 
                         if ($scope.itemClicked) {

@@ -8,7 +8,7 @@
     <tbody>
         <tr ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}" ng-repeat="item in data">
             <td ng-if="selectable">
-                <md-checkbox ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)"/>
+                <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)"/>
             </td>
             <td ng-if="!compact||!column.optional" ng-repeat="column in columns" ng-class="{'numeric':column.numeric}" ng-click="onItemClicked(item)">
                 <span ng-if="!column.tooltipPath||!item[column.tooltipPath]">{{getCellText(item, column)}}</span>
