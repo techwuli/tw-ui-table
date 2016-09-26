@@ -15,7 +15,7 @@
         <button ng-click="addColumn()">add column</button>
         <button ng-click="switch()">Switch</button>
         <button ng-click="toggleHeader()">Toggle Header</button>
-        <tw-ui-table data="data" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+        <tw-ui-table data="data" selectable="true" item-clicked="showItemInConsole" select-on-click="true" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
         {{selectedItems}}
         <script src="../bower_components/angular/angular.js"></script>
         <script src="../bower_components/angular-animate/angular-animate.js"></script>

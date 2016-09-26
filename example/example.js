@@ -84,7 +84,11 @@
 
                 $scope.toggleHeader = function() {
                     $scope.hideHeader = !$scope.hideHeader;
-                };                
+                };
+
+                $scope.showItemInConsole = function(item) {
+                    console.log(item);
+                };
             }
         ]);
 })();
