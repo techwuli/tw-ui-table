@@ -3,11 +3,17 @@
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', function() {
             var controller = [
-                '$scope', '$filter','$mdDialog',
+                '$scope', '$filter', '$mdDialog',
                 function($scope, $filter, $mdDialog) {
                     $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
                     $scope.selectOnClick = $scope.selectOnClick || false;
+
+                    var onSelectionChanged = function() {
+                        if (selectionChanged) {
+                            selectionChanged();
+                        }
+                    };
 
                     $scope.isItemSelected = function(item) {
                         return $scope.selectedItems.indexOf(item) > -1;
@@ -20,11 +26,13 @@
                         } else {
                             $scope.selectedItems.push(item);
                         }
+                        onSelectionChanged();
                     };
 
                     $scope.onItemClicked = function(item) {
                         if ($scope.selectOnClick) {
                             $scope.selectedItems = [item];
+                            onSelectionChanged();
                         }
 
                         if ($scope.itemClicked) {
@@ -81,11 +89,12 @@
                     columns: '=',
                     selectable: '=',
                     selectedItems: '=?',
+                    selectionChanged: '=?',
                     itemClicked: '=?',
                     selectOnClick: '=?',
                     defaultDateFormat: '@?',
-                    compact:'=?',
-                    hideHeader:'='
+                    compact: '=?',
+                    hideHeader: '='
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'
