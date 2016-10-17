@@ -50,6 +50,22 @@
                         );
                     };
 
+                    $scope.toggleAll = function() {
+                        if ($scope.allAreSelected()) {
+                            $scope.selectedItems = [];
+                        } else {
+                            angular.forEach($scope.data, function(item) {
+                                if ($scope.selectedItems.indexOf(item) < 0) {
+                                    $scope.selectedItems.push(item);
+                                }
+                            });
+                        }
+                    };
+
+                    $scope.allAreSelected = function() {
+                        return $scope.selectedItems.length == $scope.data.length;
+                    }
+
                     $scope.getCellText = function(item, column) {
 
                         if (!column) {

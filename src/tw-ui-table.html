@@ -1,7 +1,9 @@
 <table ng-class="{'selectable':selectable}">
     <thead ng-if="!hideHeader">
         <tr>
-            <th ng-if="selectable"></th>
+            <th ng-if="selectable">
+                <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
+            </th>
             <th ng-if="!compact||!column.optional" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.title}}</th>
         </tr>
     </thead>
