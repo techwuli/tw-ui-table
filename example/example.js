@@ -62,13 +62,17 @@
                     title: 'Action',
                     path: 'phone',
                     render: function (val, row, column) {
-                        return '<md-button class="md-fab md-mini md-primary" ><md-icon md-font-icon="material-icons">perm_phone_msg</md-icon></md-button>';
+                        return '<md-button class="md-fab md-mini md-primary" ng-click="vm.doAnyYouLike()" ><md-icon md-font-icon="material-icons">perm_phone_msg</md-icon></md-button>';
                     }
                 }];
 
                 $scope.switch = function () {
                     $scope.compact = !$scope.compact;
                 };
+
+                $scope.doAnyYouLike = function () {
+                    alert(1);
+                }
 
                 $scope.addData = function () {
                     $scope.data.push({
