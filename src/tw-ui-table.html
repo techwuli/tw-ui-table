@@ -13,9 +13,11 @@
                 <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)"/>
             </td>
             <td ng-if="!compact||!column.optional" ng-repeat="column in columns" ng-class="{'numeric':column.numeric}" ng-click="onItemClicked(item)">
-                <span ng-if="!column.tooltipPath||!item[column.tooltipPath]">{{getCellText(item, column)}}</span>
-                <span ng-if="column.tooltipPath && item[column.tooltipPath]" ng-click="showTooltip($event, item[column.tooltipPath])" class="has-tooltip">{{getCellText(item, column)}}</span>
+                <span ng-if="column.render" dynamic="getCellText(item, column) | html"></span>
+                <span ng-if="!column.render&&(!column.tooltipPath||!item[column.tooltipPath])">{{getCellText(item, column)}}</span>
+                <span ng-if="!column.render&&(column.tooltipPath && item[column.tooltipPath])" ng-click="showTooltip($event, item[column.tooltipPath])" class="has-tooltip">{{getCellText(item, column)}}</span>
             </td>
         </tr>
     </tbody>
 </table>
+ng-bind-html=" | html"

@@ -1,9 +1,11 @@
-(function() {
+(function () {
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
         .controller('MainController', [
             '$scope',
-            function($scope) {
+            function ($scope) {
+
+                var vm = $scope;
 
                 $scope.compact = false;
 
@@ -56,13 +58,23 @@
                     title: 'Work',
                     path: 'work.title',
                     optional: true
+                }, {
+                    title: 'Action',
+                    path: 'phone',
+                    render: function (val, row, column) {
+                        return '<md-button class="md-fab md-mini md-primary" ng-click="vm.doAnyYouLike()" ><md-icon md-font-icon="material-icons">perm_phone_msg</md-icon></md-button>';
+                    }
                 }];
 
-                $scope.switch = function() {
+                $scope.switch = function () {
                     $scope.compact = !$scope.compact;
                 };
 
-                $scope.addData = function() {
+                $scope.doAnyYouLike = function () {
+                    alert(1);
+                }
+
+                $scope.addData = function () {
                     $scope.data.push({
                         name: 'Yu Qiying',
                         gender: 'Female',
@@ -70,7 +82,7 @@
                     });
                 };
 
-                $scope.addColumn = function() {
+                $scope.addColumn = function () {
                     $scope.columns.push({
                         display: 'Age',
                         name: 'age',
@@ -78,19 +90,19 @@
                     });
                 };
 
-                $scope.onItemClicked = function(item) {
+                $scope.onItemClicked = function (item) {
                     console.log(item);
                 };
 
-                $scope.toggleHeader = function() {
+                $scope.toggleHeader = function () {
                     $scope.hideHeader = !$scope.hideHeader;
                 };
 
-                $scope.showItemInConsole = function(item) {
+                $scope.showItemInConsole = function (item) {
                     console.log(item);
                 };
 
-                $scope.checkSelections = function() {
+                $scope.checkSelections = function () {
                     console.log('checking selections');
                 };
             }
