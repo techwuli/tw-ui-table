@@ -10,13 +10,17 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet"/>
     </head>
 
-    <body ng-controller="MainController">
-        <button ng-click="addData()">add data</button>
-        <button ng-click="addColumn()">add column</button>
-        <button ng-click="switch()">Switch</button>
-        <button ng-click="toggleHeader()">Toggle Header</button>
-        <tw-ui-table data="data" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
-        {{selectedItems}}
+    <body layout="column" ng-controller="MainController">
+
+            <div layout="row">
+                <button ng-click="addData()">add data</button>
+                <button ng-click="addColumn()">add column</button>
+                <button ng-click="switch()">Switch</button>
+                <button ng-click="toggleHeader()">Toggle Header</button>
+            </div>
+            <tw-ui-table flex data="data" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+            <p>{{selectedItems}}</p>
+
         <script src="../bower_components/angular/angular.js"></script>
         <script src="../bower_components/angular-animate/angular-animate.js"></script>
         <script src="../bower_components/angular-aria/angular-aria.js"></script>
