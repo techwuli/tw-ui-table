@@ -17,7 +17,10 @@
         <button ng-click="toggleHeader()">Toggle Header</button>
         <button ng-click="largeData()">10000 Rows</button>
 
-        <tw-ui-table data="data" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+        <div style="height: 500px;border: 1px solid #f0f0f0;">
+            <tw-ui-table data="data" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+        </div>
+
         {{selectedItems}}
         <script src="../bower_components/angular/angular.js"></script>
         <script src="../bower_components/angular-animate/angular-animate.js"></script>
