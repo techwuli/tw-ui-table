@@ -16,7 +16,6 @@
                     };
 
                     $scope.$watchCollection('selectedItems', onSelectionChanged);
-
                     $scope.isItemSelected = function(item) {
                         return $scope.selectedItems.indexOf(item) > -1;
                     };

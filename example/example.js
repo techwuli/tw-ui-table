@@ -74,9 +74,30 @@
                     $scope.columns.push({
                         display: 'Age',
                         name: 'age',
-                        numeric: true
+                        numeric: true,
+                        path : 'age'
                     });
                 };
+                
+                $scope.largeData = function () {
+
+                    var large = [];
+                    var start = new  Date().getMilliseconds();
+                    for (var i=0;i<10000;i++){
+                        large.push({
+                            name: 'Demo Name'+i,
+                            gender: i % 2 == 0 ? 'Male' : 'Female',
+                            age: i%70,
+                            phone: '876776565',
+                            date: new Date()
+                        });
+                    }
+                    var end = new  Date().getMilliseconds();
+                    console.info('create data with:'+ end-start);
+                    $scope.data = large;
+                    var render = new  Date().getMilliseconds();
+                    console.info('render data with:'+ render-end);
+                }
 
                 $scope.onItemClicked = function(item) {
                     console.log(item);
