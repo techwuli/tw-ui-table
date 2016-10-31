@@ -39,7 +39,8 @@
                     title: 'Phone',
                     path: 'phone',
                     numeric: true,
-                    optional: true
+                    optional: true,
+                    hide: true
                 }, {
                     title: 'Age',
                     path: 'age',

@@ -6,11 +6,11 @@
                 <th ng-if="selectable">
                     <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
                 </th>
-                <th ng-if="!compact||!column.optional" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.title}}</th>
+                <th ng-if="(!compact||!column.optional)&&!column.hide" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">{{column.title}}</th>
             </tr>
             </thead>
             <tbody md-body>
-                <tr md-row md-select="dessert" md-auto-select md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}">
+                <tr md-row md-auto-select md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}">
                         <td ng-if="selectable">
                             <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)"/>
                         </td>
