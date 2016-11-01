@@ -10,16 +10,31 @@
     </head>
 
     <body ng-controller="MainController">
-        <button ng-click="addData()">add data</button>
-        <button ng-click="addColumn()">add column</button>
-        <button ng-click="switch()">Switch</button>
-        <button ng-click="toggleHeader()">Toggle Header</button>
-        <button ng-click="largeData()">10000 Rows</button>
-
-        <div style="height: 500px;border: 1px solid #f0f0f0;">
-            <tw-ui-table class="md-test-class" data="data" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+        <div layout="row">
+            <div class="flex-80">
+                <div style="height: 550px;border: 1px solid blue;">
+                    <md-toolbar class="toolbar-place">
+                        <div class="md-toolbar-tools">
+                            <md-button class="md-icon-button" aria-label="Settings">
+                                Settings
+                            </md-button>
+                            <h2>
+                                <span>DEMO TEXT</span>
+                            </h2>
+                            <span flex></span>
+                        </div>
+                    </md-toolbar>
+                    <tw-ui-table data="data" height-offset-value="heightOffsetValue" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+                </div>
+             </div>
+            <div class="flex-20">
+                <p><button ng-click="addData()">add data</button></p>
+                <p><button ng-click="addColumn()">add column</button></p>
+                <p><button ng-click="switch()">Switch</button></p>
+                <p><button ng-click="toggleHeader()">Toggle Header</button></p>
+                <p><button ng-click="largeData()">10000 Rows</button></p>
+            </div>
         </div>
-
         {{selectedItems}}
         <script src="../bower_components/angular/angular.js"></script>
         <script src="../bower_components/angular-animate/angular-animate.js"></script>

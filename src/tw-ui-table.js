@@ -3,11 +3,13 @@
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', function () {
             var controller = [
-                '$scope', '$filter', '$mdDialog',
-                function ($scope, $filter, $mdDialog) {
+                '$scope', '$filter', '$mdDialog', '$window',
+                function ($scope, $filter, $mdDialog, $window) {
+
                     $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
                     $scope.selectOnClick = $scope.selectOnClick || false;
+                    $scope.containerStyle = $scope.containerStyle || 'height:100%;';
 
                     var onSelectionChanged = function () {
                         if ($scope.selectionChanged) {
@@ -16,9 +18,21 @@
                     };
 
                     $scope.$watchCollection('selectedItems', onSelectionChanged);
+
                     $scope.isItemSelected = function (item) {
                         return $scope.selectedItems.indexOf(item) > -1;
                     };
+
+                    $scope.calcTableHeight = function () {
+                        if ($scope.heightOffsetValue && typeof ($scope.heightOffsetValue) === 'function'){
+                            $scope.containerStyle = 'height: calc(100% - '+$scope.heightOffsetValue()+'px);';
+                            $scope.$applyAsync();
+                        }
+                    }
+                    angular.element($window).bind('resize', function () {
+                        $scope.calcTableHeight();
+                    });
+                    $scope.calcTableHeight();
 
                     $scope.toggleItemSelected = function (item) {
                         var idx = $scope.selectedItems.indexOf(item);
@@ -110,7 +124,7 @@
                     defaultDateFormat: '@?',
                     compact: '=?',
                     hideHeader: '=',
-                    class: '@?'
+                    heightOffsetValue: '=?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'

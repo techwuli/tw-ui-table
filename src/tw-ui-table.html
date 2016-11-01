@@ -1,6 +1,6 @@
-<md-virtual-repeat-container class="fill-table">
+<md-virtual-repeat-container style="{{containerStyle}}">
     <md-table-container>
-        <table md-table ng-class="{'selectable':selectable}" style=" width: 100%;">
+        <table md-table ng-class="{'selectable':selectable}">
             <thead md-head ng-if="!hideHeader">
             <tr>
                 <th ng-if="selectable">

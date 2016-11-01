@@ -2,8 +2,8 @@
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
         .controller('MainController', [
-            '$scope',
-            function($scope) {
+            '$scope','$window',
+            function($scope,$window) {
 
                 $scope.compact = false;
 
@@ -79,7 +79,12 @@
                         path : 'age'
                     });
                 };
-                
+
+                $scope.heightOffsetValue = function () {
+                    var barH = angular.element(document.querySelector('.toolbar-place'))[0].clientHeight;
+                    return barH;
+                }
+
                 $scope.largeData = function () {
 
                     var large = [];
