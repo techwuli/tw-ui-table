@@ -7,107 +7,112 @@
 @font-weight-medium: 500;
 
 md-virtual-repeat-container {
-
-  table {
-    width: 100%;
-  }
+    table {
+        width: 100%;
+    }
 }
 
 tw-ui-table {
-  font-family: 'Roboto', sans-serif;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 
-  md-checkbox {
-    margin-bottom: 0;
-  }
-
-  table {
-    width: 100%;
-    background-color: @color-white;
-    border-collapse: collapse;
-
-    td,
-    th {
-      text-align: left;
-      outline: none;
-
-      &.numeric {
-        text-align: right;
-      }
-
-      &:first-child {
-        padding-left: 24px;
-      }
-
-      &:last-child {
-        padding-right: 24px;
-      }
-
-      &:not(:first-child) {
-        padding-left: 28px;
-      }
-
-      md-checkbox {
-        width: 20px;
-      }
-
-      span.has-tooltip {
-        text-decoration: underline;
-        cursor: pointer;
-        outline: none;
-      }
+    md-virtual-repeat-container {
+        flex-grow: 1;
     }
 
-    &.selectable {
-      td,
-      th {
-        &:first-child {
-          width: 20px;
-        }
-
-        &:nth-child(2) {
-          padding-left: 24px;
-        }
-      }
+    md-checkbox {
+        margin-bottom: 0;
     }
 
-    tr {
-      border-width: 0 0 1px 0;
-      border-style: solid;
-      border-color: @color-black-6;
-    }
+    table {
+        width: 100%;
+        background-color: @color-white;
+        border-collapse: collapse;
 
-    thead {
-      font-size: 12px;
-      font-weight: @font-weight-medium;
-      color: @color-black-54;
+        td,
+        th {
+            text-align: left;
+            outline: none;
 
-      tr {
-        height: 56px;
-      }
-    }
+            &.numeric {
+                text-align: right;
+            }
 
-    tbody {
-      font-size: 13px;
-      color: @color-black-87;
-      font-weight: @font-weight-regular;
+            &:first-child {
+                padding-left: 24px;
+            }
 
-      tr {
-        height: 48px;
-        outline: none;
+            &:last-child {
+                padding-right: 24px;
+            }
 
-        &.selected:hover,
-        &:hover {
-          background-color: #EEE;
+            &:not(:first-child) {
+                padding-left: 28px;
+            }
+
+            md-checkbox {
+                width: 20px;
+            }
+
+            span.has-tooltip {
+                text-decoration: underline;
+                cursor: pointer;
+                outline: none;
+            }
         }
 
-        &.selected {
-          background-color: #F5F5F5;
+        &.selectable {
+            td,
+            th {
+                &:first-child {
+                    width: 20px;
+                }
+
+                &:nth-child(2) {
+                    padding-left: 24px;
+                }
+            }
         }
 
-        &.clickable {
-          cursor: pointer;
+        tr {
+            border-width: 0 0 1px 0;
+            border-style: solid;
+            border-color: @color-black-6;
         }
-      }
+
+        thead {
+            font-size: 12px;
+            font-weight: @font-weight-medium;
+            color: @color-black-54;
+
+            tr {
+                height: 56px;
+            }
+        }
+
+        tbody {
+            font-size: 13px;
+            color: @color-black-87;
+            font-weight: @font-weight-regular;
+
+            tr {
+                height: 48px;
+                outline: none;
+
+                &.selected:hover,
+                &:hover {
+                    background-color: #EEE;
+                }
+
+                &.selected {
+                    background-color: #F5F5F5;
+                }
+
+                &.clickable {
+                    cursor: pointer;
+                }
+            }
+        }
     }
-  }
 }
