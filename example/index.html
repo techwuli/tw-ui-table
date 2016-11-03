@@ -24,7 +24,15 @@
                             <span flex></span>
                         </div>
                     </md-toolbar>
-                    <tw-ui-table data="data" height-offset-value="heightOffsetValue" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems" columns="columns" hide-header="hideHeader" compact="compact"></tw-ui-table>
+                    <tw-ui-table data="data"
+                    total-count="totalCount"
+                    is-loading="isLoading"
+                    load-more-fn="largeData"
+                    height-offset-value="heightOffsetValue"
+                    selectable="true" item-clicked="showItemInConsole"
+                    select-on-click="true" selection-changed="checkSelections"
+                    selected-items="selectedItems" columns="columns"
+                    hide-header="hideHeader" compact="compact"></tw-ui-table>
                 </div>
              </div>
             <div class="flex-20">

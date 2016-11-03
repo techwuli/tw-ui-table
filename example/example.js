@@ -83,16 +83,15 @@
                 $scope.heightOffsetValue = function () {
                     var barH = angular.element(document.querySelector('.toolbar-place'))[0].clientHeight;
                     return barH;
-                }
+                };
 
                 $scope.largeData = function () {
-
                     var large = [];
                     var start = new  Date().getMilliseconds();
                     for (var i=0;i<10000;i++){
                         large.push({
                             name: 'Demo Name'+i,
-                            gender: i % 2 == 0 ? 'Male' : 'Female',
+                            gender: i % 2 === 0 ? 'Male' : 'Female',
                             age: i%70,
                             phone: '876776565',
                             date: new Date()
@@ -103,7 +102,7 @@
                     $scope.data = large;
                     var render = new  Date().getMilliseconds();
                     console.info('render data with:'+ render-end);
-                }
+                };
 
                 $scope.onItemClicked = function(item) {
                     console.log(item);
