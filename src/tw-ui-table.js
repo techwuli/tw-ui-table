@@ -135,7 +135,7 @@
                     heightOffsetValue: '=?',
                     loadMoreFn: '=?',
                     isLoading: '=?',
-                    totalCount: '='
+                    totalCount: '=?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'
