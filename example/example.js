@@ -30,7 +30,9 @@
 
                 $scope.columns = [{
                     title: 'Name',
-                    path: 'name'
+                    path: 'name',
+                    sortable:true
+
                 }, {
                     title: 'Gender',
                     path: 'gender',
@@ -40,7 +42,7 @@
                     path: 'phone',
                     numeric: true,
                     optional: true,
-                    hide: true
+                    sortable:true
                 }, {
                     title: 'Age',
                     path: 'age',
@@ -118,6 +120,10 @@
 
                 $scope.checkSelections = function() {
                     console.log('checking selections');
+                };
+
+                $scope.sort = function (sortField, desc) {
+                    console.log(sortField, desc)
                 };
             }
         ]);
