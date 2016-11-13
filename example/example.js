@@ -10,7 +10,7 @@
                 $scope.data = [{
                     name: 'Zhao Yu',
                     gender: 'Male',
-                    age: 34,
+                    age: 0,
                     phone: '876776565',
                     date: new Date(),
                     work: {
