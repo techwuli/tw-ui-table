@@ -1,10 +1,25 @@
-(function() {
+(function () {
     'use strict';
     angular.module('tw.ui.table', ['ngMaterial'])
-        .directive('twUiTable', function() {
+        .filter('html', ['$sec', function ($sec) {
+            return function (text) {
+                return $sce.trustAsHtml(text);
+            };
+        }])
+        .directive('dynamic', function ($compile) {
+            return {
+                restrict: 'A', replace: true, link: function (scope, ele, attrs) {
+                    scope.$watch(attrs.dynamic, function (html) {
+                        ele.html(html);
+                        $compile(ele.contents())(scope);
+                    });
+                }
+            }
+        })
+        .directive('twUiTable', function () {
             var controller = [
                 '$scope', '$filter', '$mdDialog', '$window',
-                function($scope, $filter, $mdDialog, $window) {
+                function ($scope, $filter, $mdDialog, $window) {
 
                     $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
                     $scope.selectedItems = $scope.selectedItems || [];
@@ -12,7 +27,7 @@
                     $scope.containerStyle = $scope.containerStyle || 'height:100%;';
                     $scope.totalCount = $scope.totalCount || 10;
 
-                    var onSelectionChanged = function() {
+                    var onSelectionChanged = function () {
                         if ($scope.selectionChanged) {
                             $scope.selectionChanged();
                         }
@@ -20,23 +35,23 @@
 
                     $scope.$watchCollection('selectedItems', onSelectionChanged);
 
-                    $scope.isItemSelected = function(item) {
+                    $scope.isItemSelected = function (item) {
                         return $scope.selectedItems.indexOf(item) > -1;
                     };
 
-                    $scope.calcTableHeight = function() {
+                    $scope.calcTableHeight = function () {
                         if ($scope.heightOffsetValue && typeof($scope.heightOffsetValue) === 'function') {
                             $scope.containerStyle = 'height: calc(100% - ' + $scope.heightOffsetValue() + 'px);';
                             $scope.$applyAsync();
                         }
                     };
 
-                    angular.element($window).bind('resize', function() {
+                    angular.element($window).bind('resize', function () {
                         $scope.calcTableHeight();
                     });
                     $scope.calcTableHeight();
 
-                    $scope.toggleItemSelected = function(item) {
+                    $scope.toggleItemSelected = function (item) {
                         var idx = $scope.selectedItems.indexOf(item);
                         if (idx > -1) {
                             $scope.selectedItems.splice(idx, 1);
@@ -45,7 +60,7 @@
                         }
                     };
 
-                    $scope.onItemClicked = function(item) {
+                    $scope.onItemClicked = function (item) {
                         if ($scope.selectOnClick) {
                             $scope.selectedItems = [item];
                         }
@@ -55,21 +70,21 @@
                         }
                     };
 
-                    $scope.showTooltip = function(ev, text) {
+                    $scope.showTooltip = function (ev, text) {
                         $mdDialog.show(
                             $mdDialog.alert()
-                            .targetEvent(ev)
-                            .clickOutsideToClose(true)
-                            .textContent(text)
-                            .ok('close')
+                                .targetEvent(ev)
+                                .clickOutsideToClose(true)
+                                .textContent(text)
+                                .ok('close')
                         );
                     };
 
-                    $scope.toggleAll = function() {
+                    $scope.toggleAll = function () {
                         if ($scope.allAreSelected()) {
                             $scope.selectedItems = [];
                         } else {
-                            angular.forEach($scope.data, function(item) {
+                            angular.forEach($scope.data, function (item) {
                                 if ($scope.selectedItems.indexOf(item) < 0) {
                                     $scope.selectedItems.push(item);
                                 }
@@ -77,11 +92,11 @@
                         }
                     };
 
-                    $scope.allAreSelected = function() {
+                    $scope.allAreSelected = function () {
                         return $scope.selectedItems.length === $scope.data.length;
                     };
 
-                    $scope.getCellText = function(item, column) {
+                    $scope.getCellText = function (item, column) {
 
                         if (!column) {
                             throw 'column definition is not defined.';
@@ -99,7 +114,7 @@
                             pathIndex++;
                         }
 
-                        if (!columnValue && columnValue !== 0) {
+                        if (typeof(columnValue) === 'undefined' || columnValue === null) {
                             return '';
                         }
 
@@ -108,10 +123,15 @@
                             columnValue = $filter('date')(new Date(columnValue), format);
                         }
 
+                        if (typeof(column.render) === 'function') {
+                            var resp = column.render(columnValue, item, column);
+                            return typeof(resp) === 'string' ? resp : '' + resp;
+                        }
+                        
                         return columnValue;
                     };
 
-                    $scope.loadMore = function() {
+                    $scope.loadMore = function () {
                         if ($scope.loadMoreFn) {
                             $scope.loadMoreFn();
                         }
@@ -120,7 +140,7 @@
                     $scope.sortField = '';
                     $scope.sortDesc = false;
 
-                    $scope.sort = function(field) {
+                    $scope.sort = function (field) {
                         if ($scope.sortFn) {
 
                             if ($scope.sortField === field) {

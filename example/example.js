@@ -1,9 +1,9 @@
-(function() {
+(function () {
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
         .controller('MainController', [
-            '$scope','$window',
-            function($scope,$window) {
+            '$scope', '$window',
+            function ($scope, $window) {
 
                 $scope.compact = false;
 
@@ -31,7 +31,7 @@
                 $scope.columns = [{
                     title: 'Name',
                     path: 'name',
-                    sortable:true
+                    sortable: true
 
                 }, {
                     title: 'Gender',
@@ -42,7 +42,7 @@
                     path: 'phone',
                     numeric: true,
                     optional: true,
-                    sortable:true
+                    sortable: true
                 }, {
                     title: 'Age',
                     path: 'age',
@@ -59,13 +59,21 @@
                     title: 'Work',
                     path: 'work.title',
                     optional: true
-                }];
+                },
+                    {
+                        title: 'Render',
+                        path: 'name',
+                        render: function (val, item, column) {
+                            return item['name'] + ' - ' + item['age']
+                        }
+                    }
+                ];
 
-                $scope.switch = function() {
+                $scope.switch = function () {
                     $scope.compact = !$scope.compact;
                 };
 
-                $scope.addData = function() {
+                $scope.addData = function () {
                     $scope.data.push({
                         name: 'Yu Qiying',
                         gender: 'Female',
@@ -73,12 +81,12 @@
                     });
                 };
 
-                $scope.addColumn = function() {
+                $scope.addColumn = function () {
                     $scope.columns.push({
                         display: 'Age',
                         name: 'age',
                         numeric: true,
-                        path : 'age'
+                        path: 'age'
                     });
                 };
 
@@ -89,36 +97,36 @@
 
                 $scope.largeData = function () {
                     var large = [];
-                    var start = new  Date().getMilliseconds();
-                    for (var i=0;i<10000;i++){
+                    var start = new Date().getMilliseconds();
+                    for (var i = 0; i < 10000; i++) {
                         large.push({
-                            name: 'Demo Name'+i,
+                            name: 'Demo Name' + i,
                             gender: i % 2 === 0 ? 'Male' : 'Female',
-                            age: i%70,
+                            age: i % 70,
                             phone: '876776565',
                             date: new Date()
                         });
                     }
-                    var end = new  Date().getMilliseconds();
-                    console.info('create data with:'+ end-start);
+                    var end = new Date().getMilliseconds();
+                    console.info('create data with:' + end - start);
                     $scope.data = large;
-                    var render = new  Date().getMilliseconds();
-                    console.info('render data with:'+ render-end);
+                    var render = new Date().getMilliseconds();
+                    console.info('render data with:' + render - end);
                 };
 
-                $scope.onItemClicked = function(item) {
+                $scope.onItemClicked = function (item) {
                     console.log(item);
                 };
 
-                $scope.toggleHeader = function() {
+                $scope.toggleHeader = function () {
                     $scope.hideHeader = !$scope.hideHeader;
                 };
 
-                $scope.showItemInConsole = function(item) {
+                $scope.showItemInConsole = function (item) {
                     console.log(item);
                 };
 
-                $scope.checkSelections = function() {
+                $scope.checkSelections = function () {
                     console.log('checking selections');
                 };
 
