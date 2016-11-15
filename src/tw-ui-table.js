@@ -60,13 +60,14 @@
                         }
                     };
 
-                    $scope.onItemClicked = function (item) {
+                    $scope.onItemClicked = function (item, ev) {
                         if ($scope.selectOnClick) {
                             $scope.selectedItems = [item];
                         }
 
                         if ($scope.itemClicked) {
-                            $scope.itemClicked(item);
+                            console.log(ev);
+                            $scope.itemClicked(item, ev);
                         }
                     };
 
