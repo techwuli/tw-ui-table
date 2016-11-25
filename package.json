@@ -1,6 +1,6 @@
 {
     "name": "tw-ui-table",
-    "version": "0.1.12",
+    "version": "0.2.0",
     "description": "Data table implements the Material Design",
     "main": "tw-ui-table.js",
     "scripts": {

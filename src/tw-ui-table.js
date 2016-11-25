@@ -14,7 +14,7 @@
                         $compile(ele.contents())(scope);
                     });
                 }
-            }
+            };
         })
         .directive('twUiTable', function () {
             var controller = [
@@ -40,7 +40,7 @@
                     };
 
                     $scope.calcTableHeight = function () {
-                        if ($scope.heightOffsetValue && typeof($scope.heightOffsetValue) === 'function') {
+                        if ($scope.heightOffsetValue && typeof ($scope.heightOffsetValue) === 'function') {
                             $scope.containerStyle = 'height: calc(100% - ' + $scope.heightOffsetValue() + 'px);';
                             $scope.$applyAsync();
                         }
@@ -66,19 +66,8 @@
                         }
 
                         if ($scope.itemClicked) {
-                            console.log(ev);
                             $scope.itemClicked(item, ev);
                         }
-                    };
-
-                    $scope.showTooltip = function (ev, text) {
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                                .targetEvent(ev)
-                                .clickOutsideToClose(true)
-                                .textContent(text)
-                                .ok('close')
-                        );
                     };
 
                     $scope.toggleAll = function () {
@@ -115,7 +104,7 @@
                             pathIndex++;
                         }
 
-                        if (typeof(columnValue) === 'undefined' || columnValue === null) {
+                        if (typeof (columnValue) === 'undefined' || columnValue === null) {
                             return '';
                         }
 
@@ -124,11 +113,11 @@
                             columnValue = $filter('date')(new Date(columnValue), format);
                         }
 
-                        if (typeof(column.render) === 'function') {
+                        if (typeof (column.render) === 'function') {
                             var resp = column.render(columnValue, item, column);
-                            return typeof(resp) === 'string' ? resp : '' + resp;
+                            return typeof (resp) === 'string' ? resp : '' + resp;
                         }
-                        
+
                         return columnValue;
                     };
 
@@ -153,6 +142,15 @@
                             $scope.sortFn(field, $scope.sortDesc);
                         }
                     };
+
+                    $scope.getTooltipText = function (item, column) {
+                        if ($scope.tooltipFns && column.tooltipFnName) {
+                            var tooltipFn = $scope.tooltipFns[column.tooltipFnName];
+                            if (tooltipFn) {
+                                return tooltipFn(item);
+                            }
+                        }
+                    };
                 }
             ];
 
@@ -173,7 +171,8 @@
                     loadMoreFn: '=?',
                     sortFn: '=?',
                     isLoading: '=?',
-                    totalCount: '=?'
+                    totalCount: '=?',
+                    tooltipFns: '=?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'

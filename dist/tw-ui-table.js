@@ -14,7 +14,7 @@
                         $compile(ele.contents())(scope);
                     });
                 }
-            }
+            };
         })
         .directive('twUiTable', function () {
             var controller = [
@@ -40,7 +40,7 @@
                     };
 
                     $scope.calcTableHeight = function () {
-                        if ($scope.heightOffsetValue && typeof($scope.heightOffsetValue) === 'function') {
+                        if ($scope.heightOffsetValue && typeof ($scope.heightOffsetValue) === 'function') {
                             $scope.containerStyle = 'height: calc(100% - ' + $scope.heightOffsetValue() + 'px);';
                             $scope.$applyAsync();
                         }
@@ -66,19 +66,8 @@
                         }
 
                         if ($scope.itemClicked) {
-                            console.log(ev);
                             $scope.itemClicked(item, ev);
                         }
-                    };
-
-                    $scope.showTooltip = function (ev, text) {
-                        $mdDialog.show(
-                            $mdDialog.alert()
-                                .targetEvent(ev)
-                                .clickOutsideToClose(true)
-                                .textContent(text)
-                                .ok('close')
-                        );
                     };
 
                     $scope.toggleAll = function () {
@@ -115,7 +104,7 @@
                             pathIndex++;
                         }
 
-                        if (typeof(columnValue) === 'undefined' || columnValue === null) {
+                        if (typeof (columnValue) === 'undefined' || columnValue === null) {
                             return '';
                         }
 
@@ -124,11 +113,11 @@
                             columnValue = $filter('date')(new Date(columnValue), format);
                         }
 
-                        if (typeof(column.render) === 'function') {
+                        if (typeof (column.render) === 'function') {
                             var resp = column.render(columnValue, item, column);
-                            return typeof(resp) === 'string' ? resp : '' + resp;
+                            return typeof (resp) === 'string' ? resp : '' + resp;
                         }
-                        
+
                         return columnValue;
                     };
 
@@ -153,6 +142,15 @@
                             $scope.sortFn(field, $scope.sortDesc);
                         }
                     };
+
+                    $scope.getTooltipText = function (item, column) {
+                        if ($scope.tooltipFns && column.tooltipFnName) {
+                            var tooltipFn = $scope.tooltipFns[column.tooltipFnName];
+                            if (tooltipFn) {
+                                return tooltipFn(item);
+                            }
+                        }
+                    };
                 }
             ];
 
@@ -173,10 +171,11 @@
                     loadMoreFn: '=?',
                     sortFn: '=?',
                     isLoading: '=?',
-                    totalCount: '=?'
+                    totalCount: '=?',
+                    tooltipFns: '=?'
                 },
                 controller: controller,
-                template: '<md-virtual-repeat-container style=\"{{containerStyle}}\"><md-table-container><table md-table ng-class=\"{\'selectable\':selectable}\"><thead md-head ng-if=\"!hideHeader\"><tr><th ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></th><th ng-if=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\"><span ng-if=\"column.sortable\" ng-click=\"sort(column.path)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></span><span ng-if=\"!column.sortable\">{{column.title}}</span></th></tr></thead><tbody md-body><tr md-row md-auto-select md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\"><td ng-if=\"selectable\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"(!compact||!column.optional) &&! column.hide\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\" ng-click=\"onItemClicked(item, $event)\"><span ng-if=\"!column.tooltipPath||!item[column.tooltipPath]\">{{getCellText(item, column)}}</span> <span ng-if=\"column.tooltipPath && item[column.tooltipPath]\" ng-click=\"showTooltip($event, item[column.tooltipPath])\" class=\"has-tooltip\">{{getCellText(item, column)}}</span></td></tr></tbody></table><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-table-container></md-virtual-repeat-container>'
+                template: '<md-virtual-repeat-container style=\"{{containerStyle}}\"><md-table-container><table md-table ng-class=\"{\'selectable\':selectable}\"><thead md-head ng-if=\"!hideHeader\"><tr><th ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></th><th ng-if=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric}\" ng-repeat=\"column in columns\"><span ng-if=\"column.sortable\" ng-click=\"sort(column.path)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></span><span ng-if=\"!column.sortable\">{{column.title}}</span></th></tr></thead><tbody md-body><tr md-row md-auto-select md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\"><td ng-if=\"selectable\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item)\"></td><td ng-if=\"(!compact||!column.optional) &&! column.hide\" ng-repeat=\"column in columns\" ng-class=\"{\'numeric\':column.numeric}\" ng-click=\"onItemClicked(item, $event)\"><md-tooltip ng-if=\"column.tooltipFnName\">{{getTooltipText(item, column)}}</md-tooltip>{{getCellText(item, column)}}</td></tr></tbody></table><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-table-container></md-virtual-repeat-container>'
             };
         });
 })();

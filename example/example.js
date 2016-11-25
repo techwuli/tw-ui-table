@@ -31,12 +31,11 @@
                 $scope.columns = [{
                     title: 'Name',
                     path: 'name',
-                    sortable: true
-
+                    sortable: true,
+                    tooltipFnName: 'details'
                 }, {
                     title: 'Gender',
-                    path: 'gender',
-                    tooltipPath: 'phone'
+                    path: 'gender'
                 }, {
                     title: 'Phone',
                     path: 'phone',
@@ -59,15 +58,13 @@
                     title: 'Work',
                     path: 'work.title',
                     optional: true
-                },
-                    {
-                        title: 'Render',
-                        path: 'name',
-                        render: function (val, item, column) {
-                            return item['name'] + ' - ' + item['age']
-                        }
+                }, {
+                    title: 'Render',
+                    path: 'name',
+                    render: function (val, item, column) {
+                        return item.name + ' - ' + item.age;
                     }
-                ];
+                }];
 
                 $scope.switch = function () {
                     $scope.compact = !$scope.compact;
@@ -131,7 +128,13 @@
                 };
 
                 $scope.sort = function (sortField, desc) {
-                    console.log(sortField, desc)
+                    console.log(sortField, desc);
+                };
+
+                $scope.tooltipFns = {
+                    details: function (item) {
+                        return 'Hello ' + item.name + ', your work is: ' + item.work;
+                    }
                 };
             }
         ]);
