@@ -142,15 +142,6 @@
                             $scope.sortFn(field, $scope.sortDesc);
                         }
                     };
-
-                    $scope.getTooltipText = function (item, column) {
-                        if ($scope.tooltipFns && column.tooltipFnName) {
-                            var tooltipFn = $scope.tooltipFns[column.tooltipFnName];
-                            if (tooltipFn) {
-                                return tooltipFn(item);
-                            }
-                        }
-                    };
                 }
             ];
 
@@ -171,8 +162,7 @@
                     loadMoreFn: '=?',
                     sortFn: '=?',
                     isLoading: '=?',
-                    totalCount: '=?',
-                    tooltipFns: '=?'
+                    totalCount: '=?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'

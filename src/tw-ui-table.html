@@ -24,7 +24,7 @@
                         <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)" />
                     </td>
                     <td ng-if="(!compact||!column.optional) &&! column.hide" ng-repeat="column in columns" ng-class="{'numeric':column.numeric}" ng-click="onItemClicked(item, $event)">
-                        <md-tooltip ng-if="column.tooltipFnName">{{getTooltipText(item, column)}}</md-tooltip>
+                        <md-tooltip ng-if="column.tooltipFn">{{column.tooltipFn(item)}}</md-tooltip>
                        {{getCellText(item, column)}}
                     </td>
                 </tr>

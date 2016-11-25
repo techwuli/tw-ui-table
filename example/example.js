@@ -32,7 +32,9 @@
                     title: 'Name',
                     path: 'name',
                     sortable: true,
-                    tooltipFnName: 'details'
+                    tooltipFn: function (item) {
+                        return 'hello, ' + item.name;
+                    }
                 }, {
                     title: 'Gender',
                     path: 'gender'
@@ -129,12 +131,6 @@
 
                 $scope.sort = function (sortField, desc) {
                     console.log(sortField, desc);
-                };
-
-                $scope.tooltipFns = {
-                    details: function (item) {
-                        return 'Hello ' + item.name + ', your work is: ' + item.work;
-                    }
                 };
             }
         ]);
