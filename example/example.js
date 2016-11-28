@@ -34,7 +34,8 @@
                     sortable: true,
                     tooltipFn: function (item) {
                         return 'hello, ' + item.name;
-                    }
+                    },
+                    sortPath: 'phone'
                 }, {
                     title: 'Gender',
                     path: 'gender'

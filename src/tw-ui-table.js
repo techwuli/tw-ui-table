@@ -130,7 +130,13 @@
                     $scope.sortField = '';
                     $scope.sortDesc = false;
 
-                    $scope.sort = function (field) {
+                    $scope.sort = function (column) {
+
+                        var field = column.path;
+                        if (column.sortPath) {
+                            field = column.sortPath;
+                        }
+
                         if ($scope.sortFn) {
 
                             if ($scope.sortField === field) {

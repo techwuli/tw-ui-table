@@ -7,7 +7,7 @@
                         <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
                     </th>
                     <th ng-if="(!compact||!column.optional) &&! column.hide" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">
-                        <span ng-if="column.sortable" ng-click="sort(column.path)" class="sort-handler">
+                        <span ng-if="column.sortable" ng-click="sort(column)" class="sort-handler">
                             <span>{{column.title}}</span>
                             <md-icon ng-show="sortField===column.path && sortDesc" md-font-set="material-icons">keyboard_arrow_down</md-icon>
                             <md-icon ng-show="sortField===column.path && !sortDesc" md-font-set="material-icons">keyboard_arrow_up</md-icon>
