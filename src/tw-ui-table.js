@@ -154,7 +154,7 @@
                         $event.stopPropagation();
                         var command = $scope.itemCommands[name];
                         if (command) {
-                            command(item);
+                            command(item, $event);
                         }
                     };
                 }
