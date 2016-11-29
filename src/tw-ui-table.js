@@ -26,6 +26,7 @@
                     $scope.selectOnClick = $scope.selectOnClick || false;
                     $scope.containerStyle = $scope.containerStyle || 'height:100%;';
                     $scope.totalCount = $scope.totalCount || 10;
+                    $scope.itemCommands = $scope.itemCommands || {};
 
                     var onSelectionChanged = function () {
                         if ($scope.selectionChanged) {
@@ -148,6 +149,14 @@
                             $scope.sortFn(field, $scope.sortDesc);
                         }
                     };
+
+                    $scope.runCommand = function (name, item, $event) {
+                        $event.stopPropagation();
+                        var command = $scope.itemCommands[name];
+                        if (command) {
+                            command(item);
+                        }
+                    };
                 }
             ];
 
@@ -168,7 +177,8 @@
                     loadMoreFn: '=?',
                     sortFn: '=?',
                     isLoading: '=?',
-                    totalCount: '=?'
+                    totalCount: '=?',
+                    itemCommands: '=?'
                 },
                 controller: controller,
                 templateUrl: '../src/tw-ui-table.html'

@@ -29,6 +29,16 @@
                 }];
 
                 $scope.columns = [{
+                    commands: [{
+                        icon: 'open_in_new',
+                        commandName: 'fn1',
+                        tooltip: 'show name'
+                    }, {
+                        icon: 'add',
+                        commandName: 'fn2',
+                        tooltip: 'show age'
+                    }]
+                }, {
                     title: 'Name',
                     path: 'name',
                     sortable: true,
@@ -132,6 +142,15 @@
 
                 $scope.sort = function (sortField, desc) {
                     console.log(sortField, desc);
+                };
+
+                $scope.itemCommands = {
+                    fn1: function (item) {
+                        console.log(item.name);
+                    },
+                    fn2: function (item) {
+                        console.log(item.age);
+                    }
                 };
             }
         ]);
