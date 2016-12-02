@@ -6,7 +6,7 @@
                     <th ng-if="selectable">
                         <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
                     </th>
-                    <th ng-if="(!compact||!column.optional) &&! column.hide" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">
+                    <th ng-show="(!compact||!column.optional) &&! column.hide" ng-class="{'numeric':column.numeric}" ng-repeat="column in columns">
                         <span ng-if="column.sortable" ng-click="sort(column)" class="sort-handler">
                             <span>{{column.title}}</span>
                         <md-icon ng-show="sortField===column.path && sortDesc" md-font-set="material-icons">keyboard_arrow_down</md-icon>
@@ -20,11 +20,10 @@
             </thead>
             <tbody md-body>
                 <tr md-row md-auto-select md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}">
-
                     <td ng-if="selectable">
                         <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)" />
                     </td>
-                    <td ng-if="(!compact||!column.optional) &&! column.hide" ng-repeat="column in columns" ng-class="{'numeric':column.numeric}"
+                    <td ng-show="(!compact||!column.optional) &&! column.hide" ng-repeat="column in columns" ng-class="{'numeric':column.numeric}"
                         ng-click="onItemClicked(item, $event)">
                         <md-button ng-if="column.commands" class="md-icon-button md-primary" ng-click="runCommand(command.commandName, item,$event)"
                             ng-repeat="command in column.commands">
