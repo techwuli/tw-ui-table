@@ -1,0 +1,10 @@
+.command-line{
+    border-width: 1px 0 0 0;
+    border-style: solid;
+    border-color: #DEDEDE;
+}
+
+.table-container{
+    overflow-y: auto;
+    overflow-x: auto;
+}
