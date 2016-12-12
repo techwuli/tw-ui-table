@@ -1,9 +1,9 @@
-(function () {
+(function() {
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
         .controller('MainController', [
             '$scope', '$window',
-            function ($scope, $window) {
+            function($scope, $window) {
 
                 $scope.compact = false;
 
@@ -29,20 +29,16 @@
                 }];
 
                 $scope.columns = [{
-                    commands: [{
-                        icon: 'open_in_new',
-                        commandName: 'fn1',
-                        tooltip: 'show name'
-                    }, {
-                        icon: 'add',
-                        commandName: 'fn2',
-                        tooltip: 'show age'
-                    }]
+                    type: 'command',
+                    icon: 'open_in_new',
+                    commandName: 'fn1',
+                    tooltip: 'show name'
                 }, {
                     title: 'Name',
                     path: 'name',
                     sortable: true,
-                    tooltipFn: function (item) {
+                    size: 2,
+                    tooltipFn: function(item) {
                         return 'hello, ' + item.name;
                     },
                     sortPath: 'phone'
@@ -74,16 +70,16 @@
                 }, {
                     title: 'Render',
                     path: 'name',
-                    render: function (val, item, column) {
+                    render: function(val, item, column) {
                         return item.name + ' - ' + item.age;
                     }
                 }];
 
-                $scope.switch = function () {
+                $scope.switch = function() {
                     $scope.compact = !$scope.compact;
                 };
 
-                $scope.addData = function () {
+                $scope.addData = function() {
                     $scope.data.push({
                         name: 'Yu Qiying',
                         gender: 'Female',
@@ -91,7 +87,7 @@
                     });
                 };
 
-                $scope.addColumn = function () {
+                $scope.addColumn = function() {
                     $scope.columns.push({
                         display: 'Age',
                         name: 'age',
@@ -100,12 +96,12 @@
                     });
                 };
 
-                $scope.heightOffsetValue = function () {
+                $scope.heightOffsetValue = function() {
                     var barH = angular.element(document.querySelector('.toolbar-place'))[0].clientHeight;
                     return barH;
                 };
 
-                $scope.largeData = function () {
+                $scope.largeData = function() {
                     var large = [];
                     var start = new Date().getMilliseconds();
                     for (var i = 0; i < 10000; i++) {
@@ -124,31 +120,31 @@
                     console.info('render data with:' + render - end);
                 };
 
-                $scope.onItemClicked = function (item) {
+                $scope.onItemClicked = function(item) {
                     console.log(item);
                 };
 
-                $scope.toggleHeader = function () {
+                $scope.toggleHeader = function() {
                     $scope.hideHeader = !$scope.hideHeader;
                 };
 
-                $scope.showItemInConsole = function (item) {
+                $scope.showItemInConsole = function(item) {
                     console.log(item);
                 };
 
-                $scope.checkSelections = function () {
+                $scope.checkSelections = function() {
                     console.log('checking selections');
                 };
 
-                $scope.sort = function (sortField, desc) {
+                $scope.sort = function(sortField, desc) {
                     console.log(sortField, desc);
                 };
 
                 $scope.itemCommands = {
-                    fn1: function (item) {
+                    fn1: function(item) {
                         console.log(item.name);
                     },
-                    fn2: function (item) {
+                    fn2: function(item) {
                         console.log(item.age);
                     }
                 };

@@ -14,107 +14,93 @@ tw-ui-table {
     .md-virtual-repeat-container {
         flex-grow: 1;
 
-        .md-virtual-repeat-scroller{
-            overflow-x: auto;
+        .md-virtual-repeat-scroller {
+            overflow-y: auto;
+        }
+    }
 
-            table {
-                width: 100%;
-                border-collapse: collapse;
+    .tw-table-header {
+        height: 56px;
+        align-items: center;
+        font-size: 12px;
+        font-weight: @font-weight-medium;
+        color: @color-black-54;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        border-color: @color-black-6;
+    }
 
-                td,
-                th {
-                    text-align: left;
-                    outline: none;
+    .tw-table-cell {
+        &.tw-table-cell-text {
+            width: 75px;
+            min-width: 75px;
+            padding-left: 24px;
 
-                    .sort-handler {
-                        cursor: pointer;
-                        outline: none;
-                        color: #2196F3;
-                    }
+            &.x2 {
+                width: 150px;
+                min-width: 150px;
+            }
 
-                    &.numeric {
-                        text-align: right;
-                    }
+            &.x3 {
+                width: 225px;
+                min-width: 225px;
+            }
 
-                    &:first-child {
-                        padding-left: 24px;
-                    }
-
-                    &:last-child {
-                        padding-right: 24px;
-                    }
-
-                    &:not(:first-child) {
-                        padding-left: 56px;
-                    }
-
-                    md-checkbox {
-                        width: 20px;
-                    }
-
-                    span.has-tooltip {
-                        text-decoration: underline;
-                        cursor: pointer;
-                        outline: none;
-                    }
-                }
-
-                &.selectable {
-                    td,
-                    th {
-                        &:first-child {
-                            width: 20px;
-                        }
-
-                        &:nth-child(2) {
-                            padding-left: 24px;
-                        }
-                    }
-                }
-
-                tr {
-                    border-width: 0 0 1px 0;
-                    border-style: solid;
-                    border-color: @color-black-6;
-                }
-
-                thead {
-                    font-size: 12px;
-                    font-weight: @font-weight-medium;
-                    color: @color-black-54;
-
-                    tr {
-                        height: 56px;
-                    }
-                }
-
-                tbody {
-                    font-size: 13px;
-                    color: @color-black-87;
-                    font-weight: @font-weight-regular;
-
-                    tr {
-                        height: 48px;
-                        outline: none;
-
-                        &.selected:hover,
-                        &:hover {
-                            background-color: #EEE;
-                        }
-
-                        &.selected {
-                            background-color: #F5F5F5;
-                        }
-
-                        &.clickable {
-                            cursor: pointer;
-                        }
-                    }
-                }
+            &.x4 {
+                width: 300px;
+                min-width: 300px;
             }
         }
 
+        &.tw-table-cell-text ~ .tw-table-cell-text {
+            padding-left: 56px;
+        }
 
+        &.numeric {
+            text-align: right;
+        }
+
+        &.tw-table-cell-check {
+            padding-left: 24px;
+        }
+
+        &.tw-table-cell-command {
+            padding: 0;
+            width: 52px;
+        }
+
+        .sort-handler {
+            outline: none;
+            cursor: pointer;
+            color: #2196F3;
+        }
+    }
+
+    .tw-table-row {
+        align-items: center;
+        outline: none;
+        height: 48px;
+        border-width: 0 0 1px 0;
+        border-style: solid;
+        border-color: @color-black-12;
+
+        .tw-table-cell {
+            font-size: 13px;
+            color: @color-black-87;
+        }
+
+        &.selected:hover,
+        &:hover {
+            background-color: #EEE;
+        }
+
+        &.selected {
+            background-color: #F5F5F5;
+        }
+
+        &.clickable {
+            cursor: pointer;
+        }
     }
 
     md-checkbox {

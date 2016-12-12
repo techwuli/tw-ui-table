@@ -50,7 +50,7 @@
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-            $scope.containerStyle = $scope.containerStyle || 'height:100%;';
+            $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
             $scope.itemCommands = $scope.itemCommands || {};
             $scope.sortField = '';
@@ -71,11 +71,7 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
 
-                angular.element($window).bind('resize', function() {
-                    calcTableHeight();
-                });
-
-                calcTableHeight();
+                calculateTableWidth();
             }
 
             function onSelectionChanged() {
@@ -88,11 +84,21 @@
                 return $scope.selectedItems.indexOf(item) > -1;
             }
 
-            function calcTableHeight() {
-                if ($scope.heightOffsetValue && typeof($scope.heightOffsetValue) === 'function') {
-                    $scope.containerStyle = 'height: calc(100% - ' + $scope.heightOffsetValue() + 'px);';
-                    $scope.$applyAsync();
+            function calculateTableWidth() {
+                var width = 0;
+                if ($scope.selectable) {
+                    width += 54;
                 }
+                angular.forEach($scope.columns, function(column) {
+                    if (column.type === 'command') {
+                        width += 52;
+                    } else {
+                        column.size = column.size || 1;
+                        width += 75 * column.size + 56;
+                    }
+                });
+                $scope.containerStyle = 'min-width:' + width + 'px';
+                $scope.$applyAsync();
             }
 
             function toggleItemSelected(item) {
@@ -196,7 +202,7 @@
                     command(item, $event);
                 }
             }
-        }        
+        }
 
         return directive;
     }
