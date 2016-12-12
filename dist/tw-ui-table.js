@@ -70,8 +70,7 @@
 
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
-
-                calculateTableWidth();
+                $scope.$watch('compact', calculateTableWidth);
             }
 
             function onSelectionChanged() {
@@ -93,8 +92,10 @@
                     if (column.type === 'command') {
                         width += 52;
                     } else {
-                        column.size = column.size || 1;
-                        width += 75 * column.size + 56;
+                        if (!$scope.compact || !column.optional) {
+                            column.size = column.size || 1;
+                            width += 75 * column.size + 56;
+                        }
                     }
                 });
                 $scope.containerStyle = 'min-width:' + width + 'px';
