@@ -16,7 +16,7 @@
 <md-virtual-repeat-container style="{{containerStyle}}">
     <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}" ng-click="onItemClicked(item, $event)">
         <div ng-if="selectable" class="tw-table-cell tw-table-cell-check">
-            <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item)" />
+            <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item, $event)" />
         </div>
         <div ng-repeat="column in columns" ng-show="(!compact||!column.optional) && !column.hide" class="tw-table-cell x{{column.size}}" ng-class="{'tw-table-cell-command':column.type==='command','numeric':column.numeric,'tw-table-cell-text':column.type!=='command'}">
             <md-button ng-if="column.type==='command'" class="md-icon-button md-primary" ng-click="runCommand(column.commandName, item,$event)">

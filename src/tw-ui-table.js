@@ -102,7 +102,8 @@
                 $scope.$applyAsync();
             }
 
-            function toggleItemSelected(item) {
+            function toggleItemSelected(item, ev) {
+                ev.stopPropagation();
                 var idx = $scope.selectedItems.indexOf(item);
                 if (idx > -1) {
                     $scope.selectedItems.splice(idx, 1);
