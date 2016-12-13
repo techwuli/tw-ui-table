@@ -41,7 +41,6 @@
                 itemCommands: '=?'
             },
             controller: controller,
-            link: link,
             templateUrl: '../src/tw-ui-table.html'
         };
 
@@ -174,7 +173,6 @@
             }
 
             function loadMore() {
-
                 if ($scope.loadMoreFn) {
                     $scope.loadMoreFn();
                 }
@@ -205,21 +203,6 @@
                 if (command) {
                     command(item, $event);
                 }
-            }
-        }
-
-        function link(scope, element, attrs) {
-            var scrollerElements = element[0].getElementsByClassName('md-virtual-repeat-scroller');
-            var scroller = angular.element(scrollerElements);
-            scroller.on('scroll', function(e) {
-                checkScroll(scope, element, e);
-            });
-        }
-
-        function checkScroll(scope, element, e) {
-            var scrollDiff = e.currentTarget.scrollHeight - e.currentTarget.scrollTop - e.currentTarget.clientHeight;
-            if (scrollDiff < 200 && scope.totalCount > scope.data.length && !scope.isLoading) {
-                scope.loadMore();
             }
         }
 

@@ -29,9 +29,9 @@
         </div>
     </div>
 
-    <md-progress-linear md-mode="indeterminate" class="md-warn" ng-show="isLoading"></md-progress-linear>
-
-    <div class="md-padding" layout="row" ng-show="totalCount==0&&!isLoading" layout-align="center center">
-        <span class="md-caption">No item found.</span>
+    <div class="md-padding" layout="row" layout-align="center center">
+        <md-button class="md-primary" ng-click="loadMore()" ng-show="data.length<totalCount&&!isLoading">Load More</md-button>
+        <md-progress-circular md-mode="indeterminate" ng-show="isLoading"></md-progress-circular>
+        <span class="md-caption" ng-show="totalCount==0&&!isLoading">No item found.</span>
     </div>
 </md-virtual-repeat-container>
