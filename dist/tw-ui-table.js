@@ -218,8 +218,7 @@
 
         function checkScroll(scope, element, e) {
             var scrollDiff = e.currentTarget.scrollHeight - e.currentTarget.scrollTop - e.currentTarget.clientHeight;
-            if (scrollDiff < 300 && scope.totalCount > scope.data.length && !scope.isLoading) {
-                scope.isLoading = true;
+            if (scrollDiff < 200 && scope.totalCount > scope.data.length && !scope.isLoading) {
                 scope.loadMore();
             }
         }

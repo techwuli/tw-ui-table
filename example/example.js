@@ -102,7 +102,6 @@
                 };
 
                 $scope.largeData = function () {
-                console.log('load more');
                     $scope.loading=true;
                     $timeout(function () {
                         var large = [];
