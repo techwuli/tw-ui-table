@@ -72,6 +72,11 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
+                $scope.$watch('isLoading', function(newValue) {
+                    if (!newValue) {
+                        $scope.loadingMore = false;
+                    }
+                });
             }
 
             function onSelectionChanged() {
@@ -220,6 +225,7 @@
             var scrollDiff = e.currentTarget.scrollHeight - e.currentTarget.scrollTop - e.currentTarget.clientHeight;
             if (scrollDiff < 300 && scope.totalCount > scope.data.length && !scope.isLoading) {
                 scope.isLoading = true;
+                scope.loadingMore = true;
                 scope.loadMore();
             }
         }
