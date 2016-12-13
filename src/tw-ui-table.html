@@ -30,7 +30,7 @@
     </div>
 
     <div class="tw-table-loading-placeholder">
-        <md-progress-linear md-mode="indeterminate" class="md-warn" ng-show="loadingMore"></md-progress-linear>
+        <md-progress-linear md-mode="indeterminate" class="md-warn" ng-show="isLoading"></md-progress-linear>
     </div>
     <div class="md-padding" layout="row" ng-show="totalCount==0&&!isLoading" layout-align="center center">
         <span class="md-caption">No item found.</span>
