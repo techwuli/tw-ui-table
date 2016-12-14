@@ -20,15 +20,47 @@ tw-ui-table {
         }
     }
 
-    .tw-table-header {
+    .tw-table-head {
         height: 56px;
-        align-items: center;
-        font-size: 12px;
-        font-weight: @font-weight-medium;
-        color: @color-black-54;
         border-width: 0 0 1px 0;
         border-style: solid;
         border-color: @color-black-6;
+
+        .tw-table-header {
+            align-items: center;
+            font-size: 12px;
+            font-weight: @font-weight-medium;
+            color: @color-black-54;
+        }
+
+        .tw-table-loading-container {
+            height: 2px;
+
+            md-progress-linear {
+                transition: 0.4s linear all;
+
+                &.ng-enter {
+                    opacity: 0;
+
+                    &.ng-enter-active {
+                        opacity: 1;
+                    }
+                }
+
+                &.ng-leave {
+                    opacity: 1;
+
+                    &.ng-leave-active {
+                        opacity: 0;
+                    }
+                }
+                height: 2px;
+
+                .md-container {
+                    height: 2px;
+                }
+            }
+        }
     }
 
     .tw-table-cell {
