@@ -2,8 +2,8 @@
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
         .controller('MainController', [
-            '$scope', '$window', '$timeout',
-            function($scope, $window, $timeout) {
+            '$scope', '$window',
+            function($scope, $window) {
 
                 $scope.compact = false;
 
@@ -37,7 +37,7 @@
                     title: 'Name',
                     path: 'name',
                     sortable: true,
-                    size: 4,
+                    size: 2,
                     tooltipFn: function(item) {
                         return 'hello, ' + item.name;
                     },
@@ -70,7 +70,6 @@
                 }, {
                     title: 'Render',
                     path: 'name',
-                    size: 4,
                     render: function(val, item, column) {
                         return item.name + ' - ' + item.age;
                     }
@@ -103,25 +102,22 @@
                 };
 
                 $scope.largeData = function() {
-                    $timeout(function() {
-                        var large = [];
-                        var start = new Date().getMilliseconds();
-                        for (var i = 0; i < 10000; i++) {
-                            large.push({
-                                name: 'Demo Name' + i,
-                                gender: i % 2 === 0 ? 'Male' : 'Female',
-                                age: i % 70,
-                                phone: '876776565',
-                                date: new Date()
-                            });
-                        }
-                        var end = new Date().getMilliseconds();
-                        console.info('create data with:' + end - start);
-                        $scope.data = large;
-                        var render = new Date().getMilliseconds();
-                        console.info('render data with:' + render - end);
-                        $scope.loading = false;
-                    }, 4000);
+                    var large = [];
+                    var start = new Date().getMilliseconds();
+                    for (var i = 0; i < 10000; i++) {
+                        large.push({
+                            name: 'Demo Name' + i,
+                            gender: i % 2 === 0 ? 'Male' : 'Female',
+                            age: i % 70,
+                            phone: '876776565',
+                            date: new Date()
+                        });
+                    }
+                    var end = new Date().getMilliseconds();
+                    console.info('create data with:' + end - start);
+                    $scope.data = large;
+                    var render = new Date().getMilliseconds();
+                    console.info('render data with:' + render - end);
                 };
 
                 $scope.onItemClicked = function(item) {
@@ -142,10 +138,6 @@
 
                 $scope.sort = function(sortField, desc) {
                     console.log(sortField, desc);
-                };
-
-                $scope.switchLoading = function() {
-                    $scope.loading = !$scope.loading;
                 };
 
                 $scope.itemCommands = {

@@ -41,7 +41,6 @@
                 itemCommands: '=?'
             },
             controller: controller,
-            link: link,
             templateUrl: '../src/tw-ui-table.html'
         };
 
@@ -72,10 +71,6 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
-            }
-
-            function watchScroll() {
-
             }
 
             function onSelectionChanged() {
@@ -178,9 +173,7 @@
             }
 
             function loadMore() {
-                if ($scope.loadMoreFn && !$scope.isLoading) {
-                    $scope.isLoading = true;
-                    console.log('loading more');
+                if ($scope.loadMoreFn) {
                     $scope.loadMoreFn();
                 }
             }
@@ -210,22 +203,6 @@
                 if (command) {
                     command(item, $event);
                 }
-            }
-        }
-
-        function link(scope, element, attrs) {
-            var scrollerElements = element[0].getElementsByClassName('md-virtual-repeat-scroller');
-            var scroller = angular.element(scrollerElements);
-            scroller.on('scroll', function(e) {
-                checkScroll(scope, element, e);
-            });
-        }
-
-        function checkScroll(scope, element, e) {
-            var scrollDiff = e.currentTarget.scrollHeight - e.currentTarget.scrollTop - e.currentTarget.clientHeight;
-            console.log('scrollDiff: ' + scrollDiff);
-            if (scrollDiff < 300 && scope.totalCount > scope.data.length && !scope.isLoading) {
-                scope.loadMore();
             }
         }
 

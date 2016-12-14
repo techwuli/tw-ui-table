@@ -22,7 +22,7 @@
     </md-toolbar>
 
     <div flex class="table-container" layout="column">
-        <tw-ui-table flex data="data" sort-fn="sort" total-count="totalCount" is-loading="loading" load-more-fn="largeData" height-offset-value="heightOffsetValue" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections"
+        <tw-ui-table flex data="data" sort-fn="sort" total-count="totalCount" is-loading="isLoading" load-more-fn="largeData" height-offset-value="heightOffsetValue" selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections"
             selected-items="selectedItems" columns="columns" tooltip-fns="tooltipFns" item-commands="itemCommands" hide-header="hideHeader" compact="compact"></tw-ui-table>
     </div>
 
@@ -32,7 +32,6 @@
         <md-button ng-click="switch()">Switch</md-button>
         <md-button ng-click="toggleHeader()">Toggle Header</md-button>
         <md-button ng-click="largeData()">10000 Rows</md-button>
-        <md-button ng-click="switchLoading()">Switch Loading</md-button>
     </div>
 
     <script src="../bower_components/angular/angular.js"></script>
