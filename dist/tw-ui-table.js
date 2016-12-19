@@ -59,13 +59,9 @@
 
             $timeout(function() {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                console.log(headerContainer);
-
                 var scroller = angular.element(document.querySelector('#table-container-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 scroller.on('scroll', function(e) {
-                    console.log(e);
-                    console.log(e.target.scrollLeft);
                     headerContainer[0].scrollLeft = e.target.scrollLeft;
                 });
 
@@ -74,6 +70,7 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
+                $scope.$watchCollection('columns', calculateTableWidth, true);
             }
 
             function onSelectionChanged() {
@@ -95,7 +92,7 @@
                     if (column.type === 'command') {
                         width += 52;
                     } else {
-                        if (!$scope.compact || !column.optional) {
+                        if ((!$scope.compact || !column.optional) && !column.hide) {
                             column.size = column.size || 1;
                             width += 75 * column.size + 56;
                         }
