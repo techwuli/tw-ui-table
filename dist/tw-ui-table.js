@@ -1,21 +1,6 @@
 (function() {
     'use strict';
     angular.module('tw.ui.table', ['ngMaterial'])
-        // .filter('html', ['$sec', function($sec) {
-        //     return function(text) {
-        //         return $sce.trustAsHtml(text);
-        //     };
-        // }])
-        // .directive('dynamic', function ($compile) {
-        //     return {
-        //         restrict: 'A', replace: true, link: function (scope, ele, attrs) {
-        //             scope.$watch(attrs.dynamic, function (html) {
-        //                 ele.html(html);
-        //                 $compile(ele.contents())(scope);
-        //             });
-        //         }
-        //     };
-        // })
         .directive('twUiTable', twUiTable);
 
     function twUiTable() {
@@ -41,18 +26,20 @@
                 itemCommands: '=?'
             },
             controller: controller,
-            template: '<section layout=\"row\" class=\"tw-table-header\" ng-if=\"!hideHeader\" style=\"{{containerStyle}}\"><div class=\"tw-table-cell tw-table-cell-check\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-cell-command\':column.type===\'command\',\'tw-table-cell-text\':column.type!==\'command\'}\" ng-repeat=\"column in columns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></section><md-virtual-repeat-container style=\"{{containerStyle}}\"><div class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-cell-check\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in columns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-cell-command\':column.type===\'command\',\'numeric\':column.numeric,\'tw-table-cell-text\':column.type!==\'command\'}\"><md-button ng-if=\"column.type===\'command\'\" class=\"md-icon-button md-primary\" ng-click=\"runCommand(column.commandName, item,$event)\"><md-tooltip ng-if=\"column.tooltip\">{{column.tooltip}}</md-tooltip><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><md-tooltip ng-if=\"column.tooltipFn&&column.type!==\'command\'\">{{column.tooltipFn(item)}}</md-tooltip><span ng-if=\"column.type!==\'command\'\">{{getCellText(item, column)}}</span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container>'
+            template: '<section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{headerStyle}}\"><div class=\"tw-table-cell tw-table-cell-check\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-cell-command\':column.type===\'command\',\'tw-table-cell-text\':column.type!==\'command\'}\" ng-repeat=\"column in columns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-{{tableId}}\"><div style=\"{{containerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-cell-check\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in columns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-cell-command\':column.type===\'command\',\'numeric\':column.numeric,\'tw-table-cell-text\':column.type!==\'command\'}\"><md-button ng-if=\"column.type===\'command\'\" class=\"md-icon-button md-primary\" ng-click=\"runCommand(column.commandName, item,$event)\"><md-tooltip ng-if=\"column.tooltip\">{{column.tooltip}}</md-tooltip><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><md-tooltip ng-if=\"column.tooltipFn&&column.type!==\'command\'\">{{column.tooltipFn(item)}}</md-tooltip><span ng-if=\"column.type!==\'command\'\">{{getCellText(item, column)}}</span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container>',
+            link: link
         };
 
-        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window'];
+        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout'];
 
-        function controller($scope, $filter, $mdDialog, $window) {
+        function controller($scope, $filter, $mdDialog, $window, $timeout) {
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
             $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
             $scope.itemCommands = $scope.itemCommands || {};
+
             $scope.sortField = '';
             $scope.sortDesc = false;
 
@@ -65,8 +52,24 @@
             $scope.loadMore = loadMore;
             $scope.sort = sort;
             $scope.runCommand = runCommand;
+            $scope.tableId = new Date().getTime();
+
 
             init();
+
+            $timeout(function() {
+                var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+                console.log(headerContainer);
+
+                var scroller = angular.element(document.querySelector('#table-container-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
+
+                scroller.on('scroll', function(e) {
+                    console.log(e);
+                    console.log(e.target.scrollLeft);
+                    headerContainer[0].scrollLeft = e.target.scrollLeft;
+                });
+
+            });
 
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
@@ -99,6 +102,8 @@
                     }
                 });
                 $scope.containerStyle = 'min-width:' + width + 'px';
+                var headerWidth = width + 100;
+                $scope.headerStyle = 'min-width:' + headerWidth + 'px';
                 $scope.$applyAsync();
             }
 
@@ -204,6 +209,10 @@
                     command(item, $event);
                 }
             }
+        }
+
+        function link(scope, element, attrs) {
+
         }
 
         return directive;

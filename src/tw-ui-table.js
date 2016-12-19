@@ -1,21 +1,6 @@
 (function() {
     'use strict';
     angular.module('tw.ui.table', ['ngMaterial'])
-        // .filter('html', ['$sec', function($sec) {
-        //     return function(text) {
-        //         return $sce.trustAsHtml(text);
-        //     };
-        // }])
-        // .directive('dynamic', function ($compile) {
-        //     return {
-        //         restrict: 'A', replace: true, link: function (scope, ele, attrs) {
-        //             scope.$watch(attrs.dynamic, function (html) {
-        //                 ele.html(html);
-        //                 $compile(ele.contents())(scope);
-        //             });
-        //         }
-        //     };
-        // })
         .directive('twUiTable', twUiTable);
 
     function twUiTable() {
@@ -41,18 +26,20 @@
                 itemCommands: '=?'
             },
             controller: controller,
-            templateUrl: '../src/tw-ui-table.html'
+            templateUrl: '../src/tw-ui-table.html',
+            link: link
         };
 
-        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window'];
+        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout'];
 
-        function controller($scope, $filter, $mdDialog, $window) {
+        function controller($scope, $filter, $mdDialog, $window, $timeout) {
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
             $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
             $scope.itemCommands = $scope.itemCommands || {};
+
             $scope.sortField = '';
             $scope.sortDesc = false;
 
@@ -65,8 +52,24 @@
             $scope.loadMore = loadMore;
             $scope.sort = sort;
             $scope.runCommand = runCommand;
+            $scope.tableId = new Date().getTime();
+
 
             init();
+
+            $timeout(function() {
+                var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+                console.log(headerContainer);
+
+                var scroller = angular.element(document.querySelector('#table-container-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
+
+                scroller.on('scroll', function(e) {
+                    console.log(e);
+                    console.log(e.target.scrollLeft);
+                    headerContainer[0].scrollLeft = e.target.scrollLeft;
+                });
+
+            });
 
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
@@ -99,6 +102,8 @@
                     }
                 });
                 $scope.containerStyle = 'min-width:' + width + 'px';
+                var headerWidth = width + 100;
+                $scope.headerStyle = 'min-width:' + headerWidth + 'px';
                 $scope.$applyAsync();
             }
 
@@ -204,6 +209,10 @@
                     command(item, $event);
                 }
             }
+        }
+
+        function link(scope, element, attrs) {
+
         }
 
         return directive;

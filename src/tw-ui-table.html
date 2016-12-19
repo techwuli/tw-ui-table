@@ -1,20 +1,22 @@
-<section layout="row" class="tw-table-header" ng-if="!hideHeader" style="{{containerStyle}}">
-    <div class="tw-table-cell tw-table-cell-check" ng-if="selectable">
-        <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
-    </div>
-
-    <div class="tw-table-cell x{{column.size}}" ng-show="(!compact||!column.optional) &&! column.hide" ng-class="{'numeric':column.numeric,'tw-table-cell-command':column.type==='command','tw-table-cell-text':column.type!=='command'}" ng-repeat="column in columns">
-        <div ng-if="column.sortable" ng-click="sort(column)" class="sort-handler">
-            <span>{{column.title}}</span>
-            <md-icon ng-show="sortField===column.path && sortDesc" md-font-set="material-icons">keyboard_arrow_down</md-icon>
-            <md-icon ng-show="sortField===column.path && !sortDesc" md-font-set="material-icons">keyboard_arrow_up</md-icon>
+<section layout="row" id="table-header-{{tableId}}" class="tw-table-header" ng-if="!hideHeader">
+    <div layout="row" style="{{headerStyle}}">
+        <div class="tw-table-cell tw-table-cell-check" ng-if="selectable">
+            <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
         </div>
-        <span ng-if="!column.sortable">{{column.title}}</span>
+
+        <div class="tw-table-cell x{{column.size}}" ng-show="(!compact||!column.optional) &&! column.hide" ng-class="{'numeric':column.numeric,'tw-table-cell-command':column.type==='command','tw-table-cell-text':column.type!=='command'}" ng-repeat="column in columns">
+            <div ng-if="column.sortable" ng-click="sort(column)" class="sort-handler">
+                <span>{{column.title}}</span>
+                <md-icon ng-show="sortField===column.path && sortDesc" md-font-set="material-icons">keyboard_arrow_down</md-icon>
+                <md-icon ng-show="sortField===column.path && !sortDesc" md-font-set="material-icons">keyboard_arrow_up</md-icon>
+            </div>
+            <span ng-if="!column.sortable">{{column.title}}</span>
+        </div>
     </div>
 </section>
 
-<md-virtual-repeat-container style="{{containerStyle}}">
-    <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}" ng-click="onItemClicked(item, $event)">
+<md-virtual-repeat-container id="table-container-{{tableId}}">
+    <div style="{{containerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}" ng-click="onItemClicked(item, $event)">
         <div ng-if="selectable" class="tw-table-cell tw-table-cell-check">
             <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item, $event)" />
         </div>
