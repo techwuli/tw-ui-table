@@ -52,6 +52,7 @@
             $scope.loadMore = loadMore;
             $scope.sort = sort;
             $scope.runCommand = runCommand;
+            $scope.onCellClicked=onCellClicked;
             $scope.tableId = new Date().getTime();
 
 
@@ -204,6 +205,13 @@
                 var command = $scope.itemCommands[name];
                 if (command) {
                     command(item, $event);
+                }
+            }
+
+            function onCellClicked($event, item, column){
+                if(column.onClicked){
+                    $event.stopPropagation();
+                    column.onClicked(item);
                 }
             }
         }

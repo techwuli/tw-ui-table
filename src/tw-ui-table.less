@@ -1,8 +1,5 @@
-@color-black-6: rgba(0, 0, 0, .06);
-@color-black-12: rgba(0, 0, 0, .12);
-@color-black-87: rgba(0, 0, 0, .87);
-@color-black-54: rgba(0, 0, 0, .54);
-@color-white: #FFF;
+@import "./colors";
+
 @font-weight-regular: 400;
 @font-weight-medium: 500;
 
@@ -26,10 +23,10 @@ tw-ui-table {
         align-items: center;
         font-size: 12px;
         font-weight: @font-weight-medium;
-        color: @color-black-54;
+        color: @mdc-black-dark;
         border-width: 0 0 1px 0;
         border-style: solid;
-        border-color: @color-black-6;
+        border-color: @mdc-black-lightest;
         overflow: hidden;
     }
 
@@ -46,7 +43,20 @@ tw-ui-table {
             margin: auto 6px;
         }
 
-        &.tw-table-cell-text {
+        .cell-text {
+            outline: none;
+
+            &.clickable {
+                color: @mdc-blue-400;
+                font-weight: 500;
+                cursor: pointer;
+                &:hover{
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        &.tw-table-text-cell {
             width: 75px;
             min-width: 75px;
             padding-left: 24px;
@@ -73,7 +83,7 @@ tw-ui-table {
             }
         }
 
-        &.tw-table-cell-text ~ .tw-table-cell-text {
+        &.tw-table-text-cell ~ .tw-table-text-cell {
             padding-left: 56px;
         }
 
@@ -83,11 +93,11 @@ tw-ui-table {
             justify-content: flex-end;
         }
 
-        &.tw-table-cell-check {
+        &.tw-table-check-cell {
             padding-left: 24px;
         }
 
-        &.tw-table-cell-command {
+        &.tw-table-button-cell {
             padding: 0;
             width: 52px;
         }
@@ -95,7 +105,7 @@ tw-ui-table {
         .sort-handler {
             outline: none;
             cursor: pointer;
-            color: #2196F3;
+            color: @mdc-blue-400;
         }
     }
 
@@ -106,14 +116,13 @@ tw-ui-table {
         width: 100%;
         border-width: 0 0 1px 0;
         border-style: solid;
-        border-color: @color-black-12;
+        border-color: @mdc-black-lighter;
 
         .tw-table-cell {
             display: flex;
             flex-direction: row;
             font-size: 13px;
-            color: @color-black-87;
-
+            color:@mdc-black-darker;
         }
 
         &.selected:hover,

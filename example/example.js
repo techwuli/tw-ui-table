@@ -29,14 +29,15 @@
                 }];
 
                 $scope.columns = [{
-                    type: 'command',
+                    type: 'button',
                     icon: 'open_in_new',
-                    commandName: 'fn1',
-                    tooltip: 'show name'
+                    tooltip: 'show name',
+                    onClicked: fn1
                 }, {
                     title: 'Name',
                     path: 'name',
                     sortable: true,
+                    onClicked: fn2,
                     size: 2,
                     tooltipFn: function(item) {
                         return 'hello, ' + item.name;
@@ -140,14 +141,13 @@
                     console.log(sortField, desc);
                 };
 
-                $scope.itemCommands = {
-                    fn1: function(item) {
-                        console.log(item.name);
-                    },
-                    fn2: function(item) {
-                        console.log(item.age);
-                    }
-                };
+                function fn1(item) {
+                    console.log(item.name);
+                }
+
+                function fn2(item) {
+                    console.log(item.age);
+                }
             }
         ]);
 })();
