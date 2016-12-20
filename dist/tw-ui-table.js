@@ -211,7 +211,7 @@
             function onCellClicked($event, item, column){
                 if(column.onClicked){
                     $event.stopPropagation();
-                    column.onClicked(item);
+                    column.onClicked(item, $event);
                 }
             }
         }
