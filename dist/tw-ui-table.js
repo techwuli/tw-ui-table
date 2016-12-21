@@ -71,7 +71,7 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
-                $scope.$watchCollection('columns', calculateTableWidth, true);
+                $scope.$watch('columns', calculateTableWidth, true);
             }
 
             function onSelectionChanged() {
