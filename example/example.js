@@ -1,6 +1,14 @@
 (function() {
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
+        .filter('age', function() {
+            return function(input) {
+                if (input) {
+                    return 'age:' + input;
+                }
+                return input;
+            };
+        })
         .controller('MainController', [
             '$scope', '$window',
             function($scope, $window) {
@@ -56,9 +64,10 @@
                     title: 'Age',
                     path: 'age',
                     numeric: true,
-                    optional: true
+                    optional: true,
+                    filter:'age'
                 }, {
-                    title: 'Date',
+                    title: 'Date Created or Updated',
                     path: 'date',
                     numeric: true,
                     dataType: 'date',

@@ -52,7 +52,7 @@
             $scope.loadMore = loadMore;
             $scope.sort = sort;
             $scope.runCommand = runCommand;
-            $scope.onCellClicked=onCellClicked;
+            $scope.onCellClicked = onCellClicked;
             $scope.tableId = new Date().getTime();
 
 
@@ -162,6 +162,10 @@
                     return '';
                 }
 
+                if (column.filter) {
+                    columnValue = $filter(column.filter)(columnValue);
+                }
+
                 if (column.dataType === 'date') {
                     var format = column.dateFormat || $scope.defaultDateFormat;
                     columnValue = $filter('date')(new Date(columnValue), format);
@@ -208,8 +212,8 @@
                 }
             }
 
-            function onCellClicked($event, item, column){
-                if(column.onClicked){
+            function onCellClicked($event, item, column) {
+                if (column.onClicked) {
                     $event.stopPropagation();
                     column.onClicked(item, $event);
                 }
