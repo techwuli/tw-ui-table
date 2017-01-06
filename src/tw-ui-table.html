@@ -1,5 +1,9 @@
 <section layout="row" id="table-header-{{tableId}}" class="tw-table-header" ng-if="!hideHeader">
     <div layout="row" style="{{headerStyle}}">
+
+        <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
+        </div>
+
         <div class="tw-table-cell tw-table-check-cell" ng-if="selectable">
             <md-checkbox aria-label="check all" ng-checked="allAreSelected()" ng-click="toggleAll()" />
         </div>
@@ -17,6 +21,9 @@
 
 <md-virtual-repeat-container id="table-container-{{tableId}}">
     <div style="{{containerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}" ng-click="onItemClicked(item, $event)">
+        <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
+            {{$index+1}}
+        </div>
 
         <div ng-if="selectable" class="tw-table-cell tw-table-check-cell">
             <md-checkbox aria-label="select" ng-checked="isItemSelected(item)" ng-click="toggleItemSelected(item, $event)" />

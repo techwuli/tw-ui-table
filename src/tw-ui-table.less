@@ -1,32 +1,31 @@
 @import "./colors";
-
 @font-weight-regular: 400;
 @font-weight-medium: 500;
 
 tw-ui-table {
-    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    flex-grow: 1;
     overflow-x: auto;
 
     .md-virtual-repeat-container {
         flex-grow: 1;
 
         .md-virtual-repeat-scroller {
-            overflow-y: auto;
             overflow-x: auto;
+            overflow-y: auto;
         }
     }
 
     .tw-table-header {
-        height: 56px;
         align-items: center;
+        border-color: @mdc-black-lightest;
+        border-style: solid;
+        border-width: 0 0 1px 0;
+        color: @mdc-black-dark;
         font-size: 12px;
         font-weight: @font-weight-medium;
-        color: @mdc-black-dark;
-        border-width: 0 0 1px 0;
-        border-style: solid;
-        border-color: @mdc-black-lightest;
+        height: 56px;
         overflow: hidden;
     }
 
@@ -35,8 +34,8 @@ tw-ui-table {
         flex-shrink: 0;
 
         & > * {
-            margin-top: auto;
             margin-bottom: auto;
+            margin-top: auto;
         }
 
         & > .md-button.md-icon-button {
@@ -48,38 +47,39 @@ tw-ui-table {
 
             &.clickable {
                 color: @mdc-blue-400;
-                font-weight: 500;
                 cursor: pointer;
-                &:hover{
+                font-weight: 500;
+
+                &:hover {
                     text-decoration: underline;
                 }
             }
         }
 
         &.tw-table-text-cell {
-            width: 75px;
             min-width: 75px;
             padding-left: 24px;
+            width: 75px;
 
             &.x2 {
-                width: 150px;
                 min-width: 150px;
+                width: 150px;
             }
 
             &.x3 {
-                width: 225px;
                 min-width: 225px;
+                width: 225px;
             }
 
             &.x4 {
-                width: 300px;
                 min-width: 300px;
+                width: 300px;
             }
 
             span {
                 display: block;
-                text-overflow: ellipsis;
                 overflow: hidden;
+                text-overflow: ellipsis;
             }
         }
 
@@ -88,11 +88,11 @@ tw-ui-table {
         }
 
         &.numeric {
-            flex-direction: row;
             align-content: center;
+            flex-direction: row;
             justify-content: flex-end;
 
-            span{
+            span {
                 text-align: right;
             }
         }
@@ -106,27 +106,37 @@ tw-ui-table {
             width: 52px;
         }
 
+        &.tw-table-line-number-cell {
+            align-items: center;
+            color: @mdc-black-dark !important;
+            display: flex;
+            flex-direction: column;
+            padding: 0 0 0 12px;
+            width: 18px;
+            z-index: 1000;
+        }
+
         .sort-handler {
-            outline: none;
-            cursor: pointer;
             color: @mdc-blue-400;
+            cursor: pointer;
+            outline: none;
         }
     }
 
     .tw-table-row {
         align-items: stretch;
-        outline: none;
-        min-height: 48px;
-        width: 100%;
-        border-width: 0 0 1px 0;
-        border-style: solid;
         border-color: @mdc-black-lighter;
+        border-style: solid;
+        border-width: 0 0 1px 0;
+        min-height: 48px;
+        outline: none;
+        width: 100%;
 
         .tw-table-cell {
+            color: @mdc-black-darker;
             display: flex;
             flex-direction: row;
             font-size: 13px;
-            color:@mdc-black-darker;
         }
 
         &.selected:hover,

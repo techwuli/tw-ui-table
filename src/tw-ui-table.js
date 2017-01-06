@@ -23,7 +23,8 @@
                 sortFn: '=?',
                 isLoading: '=?',
                 totalCount: '=?',
-                itemCommands: '=?'
+                itemCommands: '=?',
+                lineNumber: '=?'
             },
             controller: controller,
             templateUrl: '../src/tw-ui-table.html',
@@ -55,12 +56,12 @@
             $scope.onCellClicked = onCellClicked;
             $scope.tableId = new Date().getTime();
 
-
             init();
 
             $timeout(function() {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var scroller = angular.element(document.querySelector('#table-container-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
+                var scroller = angular.element(document.querySelector('#table-container-' +
+                    $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 scroller.on('scroll', function(e) {
                     headerContainer[0].scrollLeft = e.target.scrollLeft;
@@ -141,7 +142,7 @@
             }
 
             function getCellText(item, column) {
-
+                /* jshint maxcomplexity:11 */
                 if (!column) {
                     throw 'column definition is not defined.';
                 }
