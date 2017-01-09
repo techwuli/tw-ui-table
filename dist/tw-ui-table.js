@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
     angular.module('tw.ui.table', ['ngMaterial'])
         .directive('twUiTable', twUiTable);
@@ -58,12 +58,12 @@
 
             init();
 
-            $timeout(function() {
+            $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
 
-                scroller.on('scroll', function(e) {
+                scroller.on('scroll', function (e) {
                     headerContainer[0].scrollLeft = e.target.scrollLeft;
                 });
 
@@ -87,11 +87,13 @@
 
             function calculateTableWidth() {
                 var width = 0;
+
                 if ($scope.selectable) {
                     width += 54;
                 }
-                angular.forEach($scope.columns, function(column) {
-                    if (column.type === 'command') {
+
+                angular.forEach($scope.columns, function (column) {
+                    if (column.type === 'button') {
                         width += 52;
                     } else {
                         if ((!$scope.compact || !column.optional) && !column.hide) {
@@ -100,6 +102,12 @@
                         }
                     }
                 });
+
+                width -= 32;
+                if ($scope.lineNumber) {
+                    width += 30;
+                }
+
                 $scope.containerStyle = 'min-width:' + width + 'px';
                 var headerWidth = width + 100;
                 $scope.headerStyle = 'min-width:' + headerWidth + 'px';
@@ -129,7 +137,7 @@
                 if ($scope.allAreSelected()) {
                     $scope.selectedItems = [];
                 } else {
-                    angular.forEach($scope.data, function(item) {
+                    angular.forEach($scope.data, function (item) {
                         if ($scope.selectedItems.indexOf(item) < 0) {
                             $scope.selectedItems.push(item);
                         }
@@ -159,7 +167,7 @@
                     pathIndex++;
                 }
 
-                if (typeof(columnValue) === 'undefined' || columnValue === null) {
+                if (typeof (columnValue) === 'undefined' || columnValue === null) {
                     return '';
                 }
 
@@ -172,9 +180,9 @@
                     columnValue = $filter('date')(new Date(columnValue), format);
                 }
 
-                if (typeof(column.render) === 'function') {
+                if (typeof (column.render) === 'function') {
                     var resp = column.render(columnValue, item, column);
-                    return typeof(resp) === 'string' ? resp : '' + resp;
+                    return typeof (resp) === 'string' ? resp : '' + resp;
                 }
 
                 return columnValue;
