@@ -172,7 +172,16 @@
                 }
 
                 if (column.filter) {
-                    columnValue = $filter(column.filter)(columnValue);
+
+                    if (!Array.isArray(column.filter)) {
+                        columnValue = $filter(column.filter)(columnValue);
+                    } else {
+                        if (column.filter.length === 1) {
+                            columnValue = $filter(column.filter[0])(columnValue);
+                        } else {
+                            columnValue = $filter(column.filter[0])(columnValue, column.filter[1]);
+                        }
+                    }
                 }
 
                 if (column.dataType === 'date') {
