@@ -76,20 +76,18 @@
                 $scope.$watch('columns', calculateTableWidth, true);
                 $scope.dataSet = {
                     getItemAtIndex: function (index) {
-                        if ($scope.data.length < $scope.totalCount &&
-                            $scope.data.length - index < 50 &&
-                            !loadLock &&
-                            $scope.loadMoreFn) {
-                            console.log('loading more: ' + index);
-                            loadLock = true;
-                            $scope.loadMoreFn();
-
+                        if (!loadLock) {
+                            if ($scope.data.length - index < 50) {
+                                loadLock = true;
+                                $scope.loadMoreFn();
+                            }
                         }
                         return $scope.data[index];
                     },
                     getLength: function () {
-
-                        if (previousLength !== $scope.data.length) {
+                        if (previousLength !== $scope.data.length &&
+                            $scope.data.length < $scope.totalCount &&
+                            $scope.loadMoreFn) {
                             loadLock = false;
                             previousLength = $scope.data.length;
                         }
