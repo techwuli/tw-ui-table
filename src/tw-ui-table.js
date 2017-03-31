@@ -1,6 +1,6 @@
 (function () {
     'use strict';
-    angular.module('tw.ui.table', ['ngMaterial'])
+    angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize'])
         .directive('twUiTable', twUiTable);
 
     function twUiTable() {
@@ -31,9 +31,9 @@
             link: link
         };
 
-        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout'];
+        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout', '$sce'];
 
-        function controller($scope, $filter, $mdDialog, $window, $timeout) {
+        function controller($scope, $filter, $mdDialog, $window, $timeout, $sce) {
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
@@ -150,7 +150,7 @@
             }
 
             function getCellText(item, column) {
-                /* jshint maxcomplexity:11 */
+                /* jshint maxcomplexity:13 */
                 if (!column) {
                     throw 'column definition is not defined.';
                 }
@@ -191,7 +191,8 @@
 
                 if (typeof (column.render) === 'function') {
                     var resp = column.render(columnValue, item, column);
-                    return typeof (resp) === 'string' ? resp : '' + resp;
+                    var result = $sce.trustAsHtml(typeof (resp) === 'string' ? resp : '' + resp);
+                    return result;
                 }
 
                 return columnValue;
