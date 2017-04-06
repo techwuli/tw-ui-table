@@ -38,13 +38,11 @@
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-            $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
+           // $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
             $scope.itemCommands = $scope.itemCommands || {};
-
             $scope.sortField = '';
             $scope.sortDesc = false;
-
             $scope.isItemSelected = isItemSelected;
             $scope.toggleItemSelected = toggleItemSelected;
             $scope.onItemClicked = onItemClicked;
@@ -56,16 +54,21 @@
             $scope.runCommand = runCommand;
             $scope.onCellClicked = onCellClicked;
             $scope.tableId = new Date().getTime();
+            $scope.freezedColumns = [];
+            $scope.unFreezedColumns = [];
 
             init();
 
             $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId+' .md-virtual-repeat-scroller'));
+
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
-
+                
                 scroller.on('scroll', function (e) {
                     headerContainer[0].scrollLeft = e.target.scrollLeft;
+                    freezedContainer[0].scrollTop = e.target.scrollTop;
                 });
 
             });
@@ -73,7 +76,21 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
-                $scope.$watch('columns', calculateTableWidth, true);
+                $scope.$watch('columns', initColumns);
+            }
+
+            function initColumns() {
+                $scope.freezedColumns = [];
+                $scope.unFreezedColumns = [];
+
+                angular.forEach($scope.columns, function (column) {
+                    if (column.freezed) {
+                        $scope.freezedColumns.push(column);
+                    } else {
+                        $scope.unFreezedColumns.push(column);
+                    }
+                });
+                calculateTableWidth();
             }
 
             function onSelectionChanged() {
@@ -87,31 +104,45 @@
             }
 
             function calculateTableWidth() {
-                var width = 0;
+                var freezedWidth = -32;
+                var unFreezedWidth = -32;
 
                 if ($scope.selectable) {
-                    width += 54;
+                    freezedWidth += 54;
                 }
 
                 angular.forEach($scope.columns, function (column) {
                     if (column.type === 'button') {
-                        width += 52;
+                        if (column.freezed) {
+                            freezedWidth += 52;
+                        } else {
+                            unFreezedWidth += 52;
+                        }
                     } else {
                         if ((!$scope.compact || !column.optional) && !column.hide) {
-                            column.size = column.size || 1;
-                            width += 75 * column.size + 56;
+                            if (column.freezed) {
+                                column.size = column.size || 1;
+                                freezedWidth += 75 * column.size + 56;
+                            } else {
+                                column.size = column.size || 1;
+                                unFreezedWidth += 75 * column.size + 56;
+                            }
                         }
                     }
                 });
-
-                width -= 32;
+                
                 if ($scope.lineNumber) {
-                    width += 30;
+                    freezedWidth += 50;
                 }
 
-                $scope.containerStyle = 'min-width:' + width + 'px';
-                var headerWidth = width + 100;
-                $scope.headerStyle = 'min-width:' + headerWidth + 'px';
+                $scope.freezedContainerStyle = 'min-width:' + freezedWidth + 'px';
+                var freezedHeaderWidth = freezedWidth;
+                $scope.freezedHeaderStyle = 'min-width:' + freezedHeaderWidth + 'px';
+
+                $scope.unFreezedContainerStyle = 'min-width:' + unFreezedWidth + 'px';
+                var unFreezedHeaderWidth = unFreezedWidth + 100;
+                $scope.unFreezedHeaderStyle = 'min-width:' + unFreezedHeaderWidth + 'px';
+
                 $scope.$applyAsync();
             }
 

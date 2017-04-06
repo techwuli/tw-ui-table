@@ -28,7 +28,7 @@
                 lineNumber: '=?'
             },
             controller: controller,
-            template: '<section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{headerStyle}}\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\"></div><div class=\"tw-table-cell tw-table-check-cell\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in columns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-{{tableId}}\"><div style=\"{{containerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\">{{$index+1}}</div><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-check-cell\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in columns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container>',
+            template: '<div class=\"tw-table-columns--freezed\"><section layout=\"row\" id=\"table-header-freezed-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{freezedHeaderStyle}}\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\"></div><div class=\"tw-table-cell tw-table-check-cell\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in freezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-freezed-{{tableId}}\"><div style=\"{{freezedContainerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\">{{$index+1}}</div><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-check-cell\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in freezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"table-container-freezed-placeholder\"></div></md-virtual-repeat-container></div><div class=\"tw-table-columns\" flex><section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{unFreezedHeaderStyle}}\"><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in unFreezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-{{tableId}}\"><div style=\"{{unFreezedContainerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-repeat=\"column in unFreezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container></div>',
             link: link
         };
 
@@ -38,13 +38,11 @@
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-            $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
+           // $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
             $scope.itemCommands = $scope.itemCommands || {};
-
             $scope.sortField = '';
             $scope.sortDesc = false;
-
             $scope.isItemSelected = isItemSelected;
             $scope.toggleItemSelected = toggleItemSelected;
             $scope.onItemClicked = onItemClicked;
@@ -56,16 +54,21 @@
             $scope.runCommand = runCommand;
             $scope.onCellClicked = onCellClicked;
             $scope.tableId = new Date().getTime();
+            $scope.freezedColumns = [];
+            $scope.unFreezedColumns = [];
 
             init();
 
             $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId+' .md-virtual-repeat-scroller'));
+
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
-
+                
                 scroller.on('scroll', function (e) {
                     headerContainer[0].scrollLeft = e.target.scrollLeft;
+                    freezedContainer[0].scrollTop = e.target.scrollTop;
                 });
 
             });
@@ -73,7 +76,21 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
-                $scope.$watch('columns', calculateTableWidth, true);
+                $scope.$watch('columns', initColumns);
+            }
+
+            function initColumns() {
+                $scope.freezedColumns = [];
+                $scope.unFreezedColumns = [];
+
+                angular.forEach($scope.columns, function (column) {
+                    if (column.freezed) {
+                        $scope.freezedColumns.push(column);
+                    } else {
+                        $scope.unFreezedColumns.push(column);
+                    }
+                });
+                calculateTableWidth();
             }
 
             function onSelectionChanged() {
@@ -87,31 +104,45 @@
             }
 
             function calculateTableWidth() {
-                var width = 0;
+                var freezedWidth = -32;
+                var unFreezedWidth = -32;
 
                 if ($scope.selectable) {
-                    width += 54;
+                    freezedWidth += 54;
                 }
 
                 angular.forEach($scope.columns, function (column) {
                     if (column.type === 'button') {
-                        width += 52;
+                        if (column.freezed) {
+                            freezedWidth += 52;
+                        } else {
+                            unFreezedWidth += 52;
+                        }
                     } else {
                         if ((!$scope.compact || !column.optional) && !column.hide) {
-                            column.size = column.size || 1;
-                            width += 75 * column.size + 56;
+                            if (column.freezed) {
+                                column.size = column.size || 1;
+                                freezedWidth += 75 * column.size + 56;
+                            } else {
+                                column.size = column.size || 1;
+                                unFreezedWidth += 75 * column.size + 56;
+                            }
                         }
                     }
                 });
-
-                width -= 32;
+                
                 if ($scope.lineNumber) {
-                    width += 30;
+                    freezedWidth += 50;
                 }
 
-                $scope.containerStyle = 'min-width:' + width + 'px';
-                var headerWidth = width + 100;
-                $scope.headerStyle = 'min-width:' + headerWidth + 'px';
+                $scope.freezedContainerStyle = 'min-width:' + freezedWidth + 'px';
+                var freezedHeaderWidth = freezedWidth;
+                $scope.freezedHeaderStyle = 'min-width:' + freezedHeaderWidth + 'px';
+
+                $scope.unFreezedContainerStyle = 'min-width:' + unFreezedWidth + 'px';
+                var unFreezedHeaderWidth = unFreezedWidth + 100;
+                $scope.unFreezedHeaderStyle = 'min-width:' + unFreezedHeaderWidth + 'px';
+
                 $scope.$applyAsync();
             }
 

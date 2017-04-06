@@ -16,10 +16,10 @@
                 $scope.compact = false;
 
                 $scope.data = [{
-                    name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit,<b>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </b>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                    name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit,<b>sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </b>',
                     gender: 'Male',
                     age: 0,
-                    phone: '876776565',
+                                        phone: '876776565',
                     date: new Date(),
                     work: {
                         company: 'Techwuli',
@@ -40,14 +40,16 @@
                     type: 'button',
                     icon: 'open_in_new',
                     tooltip: 'show name',
-                    onClicked: fn1
+                    onClicked: fn1,
+                    freezed:true
                 }, {
                     title: 'Name',
                     path: 'name',
                     sortable: true,
                     onClicked: fn2,
-                    size: 2,
-                    tooltipFn: function(item) {
+                    size: 3,
+                    freezed:true,
+                    tooltipFn: function (item) {
                         return 'hello, ' + item.name;
                     },
                     sortPath: 'phone'
@@ -65,7 +67,7 @@
                     path: 'age',
                     numeric: true,
                     optional: true,
-                    filter:'age'
+                    filter: 'age'
                 }, {
                     title: 'Date Created or Updated',
                     path: 'date',
@@ -80,8 +82,9 @@
                 }, {
                     title: 'Render',
                     path: 'name',
-                    render: function(val, item, column) {
-                        return item.name + ' - ' + item.age;
+                    size: 3,
+                    render: function (val, item, column) {
+                        return item.name + ' - ' + item.age+'sdkfjasdlf alsjdf lkasjdfl kajsd flkajsdl kfajklsdfj alksdjf alksdj flaksjf lkasdj flkasdj flkasjd flkasjd flkasjd flkasj df';
                     }
                 }];
 

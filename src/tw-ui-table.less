@@ -4,9 +4,36 @@
 
 tw-ui-table {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex-grow: 1;
     overflow-x: auto;
+
+    .tw-table-columns--freezed,
+    .tw-table-columns {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .tw-table-columns--freezed {
+        border-color: #EEE;
+        border-width: 0 1px 0 0;
+        border-style: solid;
+        flex-shrink:0;
+
+        .md-virtual-repeat-container {
+            .table-container-freezed-placeholder{
+                height:100px;
+            } 
+            .md-virtual-repeat-scroller {
+                overflow: hidden;
+            }
+        }
+    }
+
+
+    .tw-table-columns {
+        overflow: auto;
+    }
 
     .md-virtual-repeat-container {
         flex-grow: 1;
@@ -112,7 +139,7 @@ tw-ui-table {
             display: flex;
             flex-direction: column;
             padding: 0 0 0 12px;
-            width: 18px;
+            width: 38px;
             z-index: 1000;
         }
 
@@ -137,6 +164,10 @@ tw-ui-table {
             display: flex;
             flex-direction: row;
             font-size: 13px;
+            height: 48px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
         }
 
         &.selected:hover,
