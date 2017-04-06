@@ -1,7 +1,8 @@
 (function () {
     'use strict';
     angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize'])
-        .directive('twUiTable', twUiTable);
+        .directive('twUiTable', twUiTable)
+        .directive('twUiTableColumnsPicker', twUiTableColumnsPicker);
 
     function twUiTable() {
 
@@ -245,4 +246,57 @@
 
         return directive;
     }
+
+    function twUiTableColumnsPicker() {
+        var directive = {
+            restrict: 'E',
+            controller: controller,
+            templateUrl: '../src/tw-ui-table-columns-picker.html',
+            scope: {
+                columns: '='
+            }
+        };
+
+        controller.$inject = ['$scope', '$mdDialog'];
+
+        function controller($scope, $mdDialog) {
+            $scope.showPicker = showPicker;
+            DialogController.$inject = ['$scope', '$mdDialog', 'columns'];
+
+            function showPicker($event) {
+                $mdDialog.show({
+                    controller: DialogController,
+                    parent: angular.element(document.body),
+                    targetEvent: $event,
+                    clickOutsideToClose: false,
+                    templateUrl: '../src/tw-ui-table-columns-picker-dialog.html',
+                    locals: {
+                        columns: $scope.columns
+                    }
+                });
+            }
+
+            function DialogController($scope, $mdDialog, columns) {
+                $scope.hide = hide;
+                $scope.cancel = cancel;
+                $scope.toggle = toggle;
+                $scope.columns = columns;
+
+                function hide() {
+                    $mdDialog.hide();
+                }
+
+                function cancel() {
+                    $mdDialog.cancel();
+                }
+
+                function toggle(column) {
+                    column.hide = !column.hide;
+                }
+            }
+        }
+
+        return directive;
+    }
+
 })();
