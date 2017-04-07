@@ -1,8 +1,7 @@
 <div class="tw-table-columns--freezed">
 
-    <section layout="row" id="table-header-freezed-{{tableId}}" class="tw-table-header" ng-if="!hideHeader">
-        <div layout="row" style="{{freezedHeaderStyle}}">
-
+    <section layout="row" style="{{freezedHeaderStyle}}" id="table-header-freezed-{{tableId}}" class="tw-table-header" ng-if="!hideHeader">
+        <div layout="row" flex>
             <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
             </div>
 
@@ -22,8 +21,8 @@
         </div>
     </section>
 
-    <md-virtual-repeat-container id="table-container-freezed-{{tableId}}">
-        <div style="{{freezedContainerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
+    <md-virtual-repeat-container style="{{freezedContainerStyle}}" id="table-container-freezed-{{tableId}}">
+        <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
              ng-click="onItemClicked(item, $event)">
             <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
                 {{$index+1}}
@@ -54,8 +53,8 @@
 </div>
 
 <div class="tw-table-columns" flex>
-    <section layout="row" id="table-header-{{tableId}}" class="tw-table-header" ng-if="!hideHeader">
-        <div layout="row" style="{{unFreezedHeaderStyle}}">
+    <section layout="row" style="{{unFreezedHeaderStyle}}" id="table-header-{{tableId}}" class="tw-table-header" ng-if="!hideHeader">
+        <div layout="row" flex>
 
             <div class="tw-table-cell x{{column.size}}" ng-show="(!compact||!column.optional) &&! column.hide" ng-class="{'numeric':column.numeric,'tw-table-button-cell':column.type==='button','tw-table-text-cell':column.type!=='button'}"
                  ng-repeat="column in unFreezedColumns">
@@ -68,8 +67,8 @@
             </div>
         </div>
     </section>
-    <md-virtual-repeat-container id="table-container-{{tableId}}">
-        <div style="{{unFreezedContainerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
+    <md-virtual-repeat-container style="{{unFreezedContainerStyle}}" id="table-container-{{tableId}}">
+        <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
              ng-click="onItemClicked(item, $event)">
         
 
