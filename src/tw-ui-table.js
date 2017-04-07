@@ -38,7 +38,7 @@
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-           // $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
+            // $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
             $scope.itemCommands = $scope.itemCommands || {};
             $scope.sortField = '';
@@ -61,11 +61,11 @@
 
             $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId+' .md-virtual-repeat-scroller'));
+                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
-                
+
                 scroller.on('scroll', function (e) {
                     headerContainer[0].scrollLeft = e.target.scrollLeft;
                     freezedContainer[0].scrollTop = e.target.scrollTop;
@@ -104,7 +104,7 @@
             }
 
             function calculateTableWidth() {
-                var freezedWidth = -32;
+                var freezedWidth = 0;
                 var unFreezedWidth = -32;
 
                 if ($scope.selectable) {
@@ -130,17 +130,19 @@
                         }
                     }
                 });
-                
+
                 if ($scope.lineNumber) {
                     freezedWidth += 50;
                 }
+
+                unFreezedWidth += 48;
 
                 $scope.freezedContainerStyle = 'min-width:' + freezedWidth + 'px';
                 var freezedHeaderWidth = freezedWidth;
                 $scope.freezedHeaderStyle = 'min-width:' + freezedHeaderWidth + 'px';
 
                 $scope.unFreezedContainerStyle = 'min-width:' + unFreezedWidth + 'px';
-                var unFreezedHeaderWidth = unFreezedWidth + 100;
+                var unFreezedHeaderWidth = unFreezedWidth;
                 $scope.unFreezedHeaderStyle = 'min-width:' + unFreezedHeaderWidth + 'px';
 
                 $scope.$applyAsync();
