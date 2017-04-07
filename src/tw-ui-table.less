@@ -39,7 +39,7 @@ tw-ui-table {
         flex-grow: 1;
 
         .md-virtual-repeat-scroller {
-            overflow-x: auto;
+            overflow-x: hidden;
             overflow-y: auto;
         }
     }
@@ -187,6 +187,10 @@ tw-ui-table {
         &.clickable {
             cursor: pointer;
         }
+    }
+
+    .tw-table-columns--drop-shadow{
+        box-shadow: 1px 1px 1px #000;
     }
 
     md-checkbox {
