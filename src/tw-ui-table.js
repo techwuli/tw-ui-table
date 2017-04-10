@@ -72,7 +72,6 @@
             $scope.nextPage = nextPage;
             $scope.pageSizeOptions = [20, 50, 'All'];
             $scope.onPageSizeChanged = onPageSizeChanged;
-            $scope.pageSizeOnView=$scope.pageSize;
 
             init();
 
@@ -124,9 +123,9 @@
             }
 
             function onPageSizeChanged($event) {
-                console.log('page size changed: ' + $scope.pageSizeOnView);
+                console.log('page size changed: ' + $scope.pageSize);
 
-                changePaging(0, $scope.pageSizeOnView);
+                changePaging(0, $scope.pageSize);
             }
 
             function getPages() {

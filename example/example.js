@@ -116,7 +116,7 @@
                             pageIndex: pageIndex,
                             pageSize: pageSize,
                             items: data,
-                            totalCount: 1000
+                            totalCount: 995
                         });
                     }, 1000);
 

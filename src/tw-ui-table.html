@@ -102,9 +102,11 @@
 <div ng-show="paging" class="tw-ui-table-pagination">
     <div class="paginate-section">
         <label>Rows per page:</label>
-        <md-select ng-model="pageSizeOnView" ng-change="onPageSizeChanged($event)" aria-label="on change page size" ng-disabled="isLoading"
+        <md-select ng-model="pageSize" ng-change="onPageSizeChanged($event)" aria-label="on change page size" ng-disabled="isLoading"
             class="md-no-underline">
-            <md-option ng-value="pageSizeOption" ng-repeat="pageSizeOption in pageSizeOptions">{{pageSizeOption}}</md-option>
+            <md-option value="20">20</md-option>
+            <md-option value="50">50</md-option>
+            <md-option ng-value="totalCount">All</md-option>
         </md-select>
     </div>
 
