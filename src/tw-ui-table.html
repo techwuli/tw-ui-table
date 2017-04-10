@@ -28,7 +28,7 @@
             <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
                 ng-click="onItemClicked(item, $event)">
                 <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
-                    {{$index+1+pageIndex*pageSize}}
+                    {{$index+1+((pageIndex*pageSize)||0)}}
                 </div>
 
                 <div ng-if="selectable" class="tw-table-cell tw-table-check-cell">
