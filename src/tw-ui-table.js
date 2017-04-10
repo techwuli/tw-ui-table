@@ -84,8 +84,12 @@
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 scroller.on('scroll', function (e) {
-                    headerContainer[0].scrollLeft = e.target.scrollLeft;
-                    freezedContainer[0].scrollTop = e.target.scrollTop;
+                    if (headerContainer[0]) {
+                        headerContainer[0].scrollLeft = e.target.scrollLeft;
+                    }
+                    if (freezedContainer[0]) {
+                        freezedContainer[0].scrollTop = e.target.scrollTop;
+                    }
                 });
 
             });
