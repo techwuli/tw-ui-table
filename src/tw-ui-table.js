@@ -25,7 +25,11 @@
                 isLoading: '=?',
                 totalCount: '=?',
                 itemCommands: '=?',
-                lineNumber: '=?'
+                lineNumber: '=?',
+                paging: '=?',
+                pageIndex: '=?',
+                pageSize: '=?',
+                onPagingChanged: '=?'
             },
             controller: controller,
             templateUrl: '../src/tw-ui-table.html',
@@ -35,11 +39,14 @@
         controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout', '$sce'];
 
         function controller($scope, $filter, $mdDialog, $window, $timeout, $sce) {
+
+            /* jshint -W071 */
+            /* jshint -W074 */
+
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-            // $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
-            $scope.totalCount = $scope.totalCount || 10;
+            $scope.totalCount = $scope.totalCount || 0;
             $scope.itemCommands = $scope.itemCommands || {};
             $scope.sortField = '';
             $scope.sortDesc = false;
@@ -56,12 +63,23 @@
             $scope.tableId = new Date().getTime();
             $scope.freezedColumns = [];
             $scope.unFreezedColumns = [];
+            $scope.onPagingChanged = $scope.onPagingChanged || function () {};
+            $scope.getPages = getPages;
+            $scope.showPaginateNumber = showPaginateNumber;
+            $scope.showPaginateSymbol = showPaginateSymbol;
+            $scope.changePageIndex = changePageIndex;
+            $scope.previousPage = previousPage;
+            $scope.nextPage = nextPage;
+            $scope.pageSizeOptions = [20, 50, 'All'];
+            $scope.onPageSizeChanged = onPageSizeChanged;
+            $scope.pageSizeOnView=$scope.pageSize;
 
             init();
 
             $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
+                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
+                    $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
@@ -73,10 +91,51 @@
 
             });
 
+            function showPaginateSymbol(page) {
+                if (showPaginateNumber(page)) {
+                    return false;
+                }
+                if (Math.abs(page - $scope.pageIndex) === 3) {
+                    return true;
+                }
+            }
+
+            function showPaginateNumber(page) {
+                if (page === 0 || page === getPages().length - 1) {
+                    return true;
+                }
+
+                if (Math.abs(page - $scope.pageIndex) < 3) {
+                    return true;
+                }
+            }
+
+            function changePageIndex(page) {
+                if (page === $scope.pageIndex) {
+                    return;
+                }
+                changePaging(page, $scope.pageSize);
+            }
+
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
                 $scope.$watch('columns', initColumns);
+            }
+
+            function onPageSizeChanged($event) {
+                console.log('page size changed: ' + $scope.pageSizeOnView);
+
+                changePaging(0, $scope.pageSizeOnView);
+            }
+
+            function getPages() {
+                var pages = [];
+                var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
+                for (var i = 0; i < pageCount; i++) {
+                    pages.push(i);
+                }
+                return pages;
             }
 
             function initColumns() {
@@ -270,6 +329,20 @@
                     $event.stopPropagation();
                     column.onClicked(item, $event);
                 }
+            }
+
+            function previousPage() {
+                changePaging($scope.pageIndex - 1, $scope.pageSize);
+            }
+
+            function nextPage() {
+                changePaging($scope.pageIndex + 1, $scope.pageSize);
+            }
+
+            function changePaging(pageIndex, pageSize) {
+                $scope.pageIndex = pageIndex;
+                $scope.pageSize = pageSize;
+                $scope.onPagingChanged(pageIndex, pageSize);
             }
         }
 

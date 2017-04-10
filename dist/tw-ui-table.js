@@ -25,21 +25,28 @@
                 isLoading: '=?',
                 totalCount: '=?',
                 itemCommands: '=?',
-                lineNumber: '=?'
+                lineNumber: '=?',
+                paging: '=?',
+                pageIndex: '=?',
+                pageSize: '=?',
+                onPagingChanged: '=?'
             },
             controller: controller,
-            template: '<div class=\"tw-table-columns--freezed\"><section layout=\"row\" id=\"table-header-freezed-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\" style=\"{{freezedHeaderStyle}}\"><div layout=\"row\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\"></div><div class=\"tw-table-cell tw-table-check-cell\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in freezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-freezed-{{tableId}}\" style=\"{{freezedContainerStyle}}\"><div class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\">{{$index+1}}</div><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-check-cell\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in freezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"table-container-freezed-placeholder\"></div></md-virtual-repeat-container></div><div class=\"tw-table-columns\" flex><section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{unFreezedHeaderStyle}}\"><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in unFreezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-{{tableId}}\"><div style=\"{{unFreezedContainerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-repeat=\"column in unFreezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container></div>',
+            template: '<div layout=\"row\" flex><div class=\"tw-table-columns--freezed\"><section layout=\"row\" id=\"table-header-freezed-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\" style=\"{{freezedHeaderStyle}}\"><div layout=\"row\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\"></div><div class=\"tw-table-cell tw-table-check-cell\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in freezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-freezed-{{tableId}}\" style=\"{{freezedContainerStyle}}\"><div class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\">{{$index+1}}</div><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-check-cell\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in freezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"table-container-freezed-placeholder\"></div></md-virtual-repeat-container></div><div class=\"tw-table-columns\" flex><section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{unFreezedHeaderStyle}}\"><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) &&! column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in unFreezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-{{tableId}}\"><div style=\"{{unFreezedContainerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-repeat=\"column in unFreezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-if=\"!paging\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container></div></div><div ng-show=\"paging\" class=\"tw-ui-table-pagination\"><div class=\"paginate-section\"><label>Rows per page:</label><md-select ng-model=\"pageSizeOnView\" ng-change=\"onPageSizeChanged($event)\" aria-label=\"on change page size\" ng-disabled=\"isLoading\" class=\"md-no-underline\"><md-option ng-value=\"pageSizeOption\" ng-repeat=\"pageSizeOption in pageSizeOptions\">{{pageSizeOption}}</md-option></md-select></div><div class=\"paginate-section\"><span>{{pageIndex*pageSize}} - {{(pageIndex+1)*pageSize}} of {{totalCount}}</span></div><div class=\"paginate-section\"><md-button class=\"md-icon-button\" ng-click=\"previousPage()\" ng-disabled=\"isLoading || pageIndex===0\"><md-icon md-font-set=\"material-icons\">keyboard_arrow_left</md-icon></md-button><div class=\"page-indicator\" ng-repeat=\"page in getPages()\"><span class=\"paginate-symbol\" ng-if=\"showPaginateSymbol(page)\">...</span><md-button ng-disabled=\"isLoading\" ng-click=\"changePageIndex(page)\" class=\"paginate-number\" ng-if=\"showPaginateNumber(page)\" ng-class=\"{\'current\':page===pageIndex}\">{{page+1}}</md-button></div><md-button class=\"md-icon-button\" ng-click=\"nextPage()\" ng-disabled=\"isLoading || (pageIndex+1)>=getPages().length\"><md-icon md-font-set=\"material-icons\">keyboard_arrow_right</md-icon></md-button></div></div>',
             link: link
         };
 
         controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout', '$sce'];
 
         function controller($scope, $filter, $mdDialog, $window, $timeout, $sce) {
+
+            /* jshint -W071 */
+            /* jshint -W074 */
+
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-            // $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
-            $scope.totalCount = $scope.totalCount || 10;
+            $scope.totalCount = $scope.totalCount || 0;
             $scope.itemCommands = $scope.itemCommands || {};
             $scope.sortField = '';
             $scope.sortDesc = false;
@@ -56,12 +63,23 @@
             $scope.tableId = new Date().getTime();
             $scope.freezedColumns = [];
             $scope.unFreezedColumns = [];
+            $scope.onPagingChanged = $scope.onPagingChanged || function () {};
+            $scope.getPages = getPages;
+            $scope.showPaginateNumber = showPaginateNumber;
+            $scope.showPaginateSymbol = showPaginateSymbol;
+            $scope.changePageIndex = changePageIndex;
+            $scope.previousPage = previousPage;
+            $scope.nextPage = nextPage;
+            $scope.pageSizeOptions = [20, 50, 'All'];
+            $scope.onPageSizeChanged = onPageSizeChanged;
+            $scope.pageSizeOnView=$scope.pageSize;
 
             init();
 
             $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId + ' .md-virtual-repeat-scroller'));
+                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
+                    $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
@@ -73,10 +91,51 @@
 
             });
 
+            function showPaginateSymbol(page) {
+                if (showPaginateNumber(page)) {
+                    return false;
+                }
+                if (Math.abs(page - $scope.pageIndex) === 3) {
+                    return true;
+                }
+            }
+
+            function showPaginateNumber(page) {
+                if (page === 0 || page === getPages().length - 1) {
+                    return true;
+                }
+
+                if (Math.abs(page - $scope.pageIndex) < 3) {
+                    return true;
+                }
+            }
+
+            function changePageIndex(page) {
+                if (page === $scope.pageIndex) {
+                    return;
+                }
+                changePaging(page, $scope.pageSize);
+            }
+
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
                 $scope.$watch('columns', initColumns);
+            }
+
+            function onPageSizeChanged($event) {
+                console.log('page size changed: ' + $scope.pageSizeOnView);
+
+                changePaging(0, $scope.pageSizeOnView);
+            }
+
+            function getPages() {
+                var pages = [];
+                var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
+                for (var i = 0; i < pageCount; i++) {
+                    pages.push(i);
+                }
+                return pages;
             }
 
             function initColumns() {
@@ -270,6 +329,20 @@
                     $event.stopPropagation();
                     column.onClicked(item, $event);
                 }
+            }
+
+            function previousPage() {
+                changePaging($scope.pageIndex - 1, $scope.pageSize);
+            }
+
+            function nextPage() {
+                changePaging($scope.pageIndex + 1, $scope.pageSize);
+            }
+
+            function changePaging(pageIndex, pageSize) {
+                $scope.pageIndex = pageIndex;
+                $scope.pageSize = pageSize;
+                $scope.onPagingChanged(pageIndex, pageSize);
             }
         }
 
