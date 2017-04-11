@@ -5,26 +5,26 @@ var gulpUglify = require('gulp-uglify');
 var gulpRename = require('gulp-rename');
 var gulpUtil = require('gulp-util');
 var gulpDirectiveReplace = require('gulp-directive-replace');
-var lessPluginAutoPrefix = require('less-plugin-autoprefix');
-var lessPluginCleanCss = require('less-plugin-clean-css');
-var autoPrefix = new lessPluginAutoPrefix({
+var LessPluginAutoPrefix = require('less-plugin-autoprefix');
+var LessPluginCleanCss = require('less-plugin-clean-css');
+var autoPrefix = new LessPluginAutoPrefix({
     browsers: ['last 2 versions']
 });
-var cleanCss = new lessPluginCleanCss();
+var cleanCss = new LessPluginCleanCss();
 var runSequence = require('run-sequence');
 
-gulp.task('less', function() {
+gulp.task('less', function () {
     return gulp
         .src('src/tw-ui-table.less')
         .pipe(gulpLess({
             plugins: [autoPrefix, cleanCss]
-        }).on('error', function(err) {
+        }).on('error', function (err) {
             gulpUtil.log(err);
         }))
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js', function() {
+gulp.task('js', function () {
     return gulp
         .src('src/tw-ui-table.js')
         .pipe(gulpDirectiveReplace({
@@ -33,7 +33,7 @@ gulp.task('js', function() {
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('js_min', function() {
+gulp.task('js_min', function () {
     return gulp
         .src('src/tw-ui-table.js')
         .pipe(gulpDirectiveReplace({
@@ -44,10 +44,10 @@ gulp.task('js_min', function() {
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('serve', function() {
-    gulp.watch('src/tw-ui-table.html', ['js', 'js_min']);
-    gulp.watch('src/tw-ui-table.js', ['js', 'js_min']);
-    gulp.watch('src/tw-ui-table.less', ['less']);
+gulp.task('serve', function () {
+    gulp.watch('src/*.html', ['js', 'js_min']);
+    gulp.watch('src/*.js', ['js', 'js_min']);
+    gulp.watch('src/*.less', ['less']);
     browserSync.init({
         server: {
             baseDir: './'

@@ -1,22 +1,83 @@
 @import "./colors";
 @font-weight-regular: 400;
 @font-weight-medium: 500;
-
 tw-ui-table {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     overflow-x: auto;
-
+    .tw-ui-table-pagination {
+        border-width: 1px 0 0 0;
+        border-color: @mdc-black-lightest;
+        border-style: solid;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        height: 56px;
+        padding: 0 14px;
+        align-items: center;
+        font-size: 12px;
+        color: rgba(0, 0, 0, .54);
+        .paginate-section {
+            margin-left: 32px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            md-select {
+                margin: 0;
+                md-select-value {
+                    min-width: inherit;
+                }
+            }
+            &>label {
+                margin-right: 40px;
+            }
+            .page-indicator {
+                .paginate-number {
+                    min-width: inherit;
+                    min-height: inherit;
+                    margin: inherit;
+                    padding: 0 6px;
+                    span {
+                        line-height: 26px;
+                    }
+                    &.current {
+                        background-color: rgba(0, 0, 0, .54);
+                        color: rgba(255, 255, 255, .87);
+                    }
+                }
+            }
+        }
+    }
+    .tw-table-columns--freezed,
+    .tw-table-columns {
+        display: flex;
+        flex-direction: column;
+    }
+    .tw-table-columns--freezed {
+        border-color: #EEE;
+        border-width: 0 1px 0 0;
+        border-style: solid;
+        flex-shrink: 0;
+        .md-virtual-repeat-container {
+            .table-container-freezed-placeholder {
+                height: 100px;
+            }
+            .md-virtual-repeat-scroller {
+                overflow: hidden;
+            }
+        }
+    }
+    .tw-table-columns {
+        overflow: auto;
+    }
     .md-virtual-repeat-container {
         flex-grow: 1;
-
         .md-virtual-repeat-scroller {
             overflow-x: auto;
             overflow-y: auto;
         }
     }
-
     .tw-table-header {
         align-items: center;
         border-color: @mdc-black-lightest;
@@ -28,101 +89,83 @@ tw-ui-table {
         height: 56px;
         overflow: hidden;
     }
-
     .tw-table-cell {
         display: flex;
         flex-shrink: 0;
-
-        & > * {
+        &>* {
             margin-bottom: auto;
             margin-top: auto;
         }
-
-        & > .md-button.md-icon-button {
+        &>.md-button.md-icon-button {
             margin: auto 6px;
         }
-
         .cell-text {
             outline: none;
-
             &.clickable {
                 color: @mdc-blue-400;
                 cursor: pointer;
                 font-weight: 500;
-
                 &:hover {
                     text-decoration: underline;
                 }
             }
         }
-
         &.tw-table-text-cell {
             min-width: 75px;
             padding-left: 24px;
             width: 75px;
-
             &.x2 {
                 min-width: 150px;
                 width: 150px;
             }
-
             &.x3 {
                 min-width: 225px;
                 width: 225px;
             }
-
             &.x4 {
                 min-width: 300px;
                 width: 300px;
             }
-
             span {
                 display: block;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
         }
-
-        &.tw-table-text-cell ~ .tw-table-text-cell {
+        &.tw-table-text-cell~.tw-table-text-cell {
             padding-left: 56px;
         }
-
         &.numeric {
             align-content: center;
             flex-direction: row;
             justify-content: flex-end;
-
             span {
                 text-align: right;
             }
         }
-
         &.tw-table-check-cell {
-            padding-left: 24px;
+            padding-left: 16px;
+            padding-right: 8px;
         }
-
         &.tw-table-button-cell {
             padding: 0;
             width: 52px;
         }
-
         &.tw-table-line-number-cell {
             align-items: center;
             color: @mdc-black-dark !important;
             display: flex;
             flex-direction: column;
             padding: 0 0 0 12px;
-            width: 18px;
+            width: 38px;
             z-index: 1000;
         }
-
         .sort-handler {
             color: @mdc-blue-400;
             cursor: pointer;
             outline: none;
         }
     }
-
     .tw-table-row {
         align-items: stretch;
         border-color: @mdc-black-lighter;
@@ -131,37 +174,36 @@ tw-ui-table {
         min-height: 48px;
         outline: none;
         width: 100%;
-
         .tw-table-cell {
             color: @mdc-black-darker;
             display: flex;
             flex-direction: row;
             font-size: 13px;
+            height: 48px;
         }
-
         &.selected:hover,
         &:hover {
             background-color: #EEE;
-
             .tw-table-cell {
                 background-color: #EEE;
             }
         }
-
         &.selected {
             background-color: #F5F5F5;
-
             .tw-table-cell {
                 background-color: #F5F5F5;
             }
         }
-
         &.clickable {
             cursor: pointer;
         }
     }
-
     md-checkbox {
         margin-bottom: 0;
+    }
+    .sort-handler {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 }

@@ -1,8 +1,8 @@
-(function() {
+(function () {
     'use strict';
     angular.module('tw.ui.table.example', ['tw.ui.table'])
-        .filter('age', function() {
-            return function(input) {
+        .filter('age', function () {
+            return function (input) {
                 if (input) {
                     return 'age:' + input;
                 }
@@ -10,44 +10,36 @@
             };
         })
         .controller('MainController', [
-            '$scope', '$window',
-            function($scope, $window) {
+            '$scope', '$window', '$timeout', '$q',
+            function ($scope, $window, $timeout, $q) {
 
+                $scope.data = [];
                 $scope.compact = false;
-
-                $scope.data = [{
-                    name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-                    gender: 'Male',
-                    age: 0,
-                    phone: '876776565',
-                    date: new Date(),
-                    work: {
-                        company: 'Techwuli',
-                        title: 'Senior Developer'
-                    }
-                }, {
-                    name: 'Chen Min',
-                    gender: 'Female',
-                    age: 30,
-                    phone: '909876556'
-                }, {
-                    name: 'Zhao Yunze',
-                    gender: 'Male',
-                    age: 4
-                }];
+                $scope.pageIndex = 0;
+                $scope.pageSize = 50;
+                $scope.totalCount = 0;
+                $scope.switch = switchFn;
+                $scope.onItemClicked = onItemClicked;
+                $scope.toggleHeader = toggleHeader;
+                $scope.showItemInConsole = showItemInConsole;
+                $scope.checkSelections = checkSelections;
+                $scope.sort = sort;
+                $scope.onPagingChanged = onPagingChanged;
 
                 $scope.columns = [{
                     type: 'button',
                     icon: 'open_in_new',
                     tooltip: 'show name',
-                    onClicked: fn1
+                    onClicked: fn1,
+                    freezed: true
                 }, {
                     title: 'Name',
                     path: 'name',
                     sortable: true,
                     onClicked: fn2,
-                    size: 2,
-                    tooltipFn: function(item) {
+                    size: 3,
+                    freezed: true,
+                    tooltipFn: function (item) {
                         return 'hello, ' + item.name;
                     },
                     sortPath: 'phone'
@@ -65,7 +57,7 @@
                     path: 'age',
                     numeric: true,
                     optional: true,
-                    filter:'age'
+                    filter: 'age'
                 }, {
                     title: 'Date Created or Updated',
                     path: 'date',
@@ -80,75 +72,81 @@
                 }, {
                     title: 'Render',
                     path: 'name',
-                    render: function(val, item, column) {
+                    size: 3,
+                    render: function (val, item, column) {
                         return item.name + ' - ' + item.age;
                     }
                 }];
 
-                $scope.switch = function() {
+                function switchFn() {
                     $scope.compact = !$scope.compact;
-                };
+                }
 
-                $scope.addData = function() {
-                    $scope.data.push({
-                        name: 'Yu Qiying',
-                        gender: 'Female',
-                        age: 58
+                init();
+
+                function init() {
+                    loadData($scope.pageIndex, $scope.pageSize);
+                }
+
+                function loadData(pageIndex, pageSize) {
+                    $scope.loading = true;
+                    fetchData(pageIndex, pageSize).then(function (data) {
+                        $scope.loading = false;
+                        $scope.data = data.items;
+                        $scope.pageIndex = data.pageIndex;
+                        $scope.pageSize = data.pageSize;
+                        $scope.totalCount = data.totalCount;
                     });
-                };
+                }
 
-                $scope.addColumn = function() {
-                    $scope.columns.push({
-                        display: 'Age',
-                        name: 'age',
-                        numeric: true,
-                        path: 'age'
-                    });
-                };
-
-                $scope.heightOffsetValue = function() {
-                    var barH = angular.element(document.querySelector('.toolbar-place'))[0].clientHeight;
-                    return barH;
-                };
-
-                $scope.largeData = function() {
-                    var large = [];
-                    var start = new Date().getMilliseconds();
-                    for (var i = 0; i < 10000; i++) {
-                        large.push({
-                            name: 'Demo Name' + i,
-                            gender: i % 2 === 0 ? 'Male' : 'Female',
-                            age: i % 70,
-                            phone: '876776565',
-                            date: new Date()
+                function fetchData(pageIndex, pageSize) {
+                    var deferred = $q.defer();
+                    $timeout(function () {
+                        var data = [];
+                        for (var i = pageIndex * pageSize; i < (pageIndex + 1) * pageSize; i++) {
+                            data.push({
+                                name: 'Demo name ' + i,
+                                gender: i % 2 === 0 ? 'Male' : 'Female',
+                                age: i % 70,
+                                phone: '83874982375',
+                                data: new Date()
+                            });
+                        }
+                        deferred.resolve({
+                            pageIndex: pageIndex,
+                            pageSize: pageSize,
+                            items: data,
+                            totalCount: 995
                         });
-                    }
-                    var end = new Date().getMilliseconds();
-                    console.info('create data with:' + end - start);
-                    $scope.data = large;
-                    var render = new Date().getMilliseconds();
-                    console.info('render data with:' + render - end);
-                };
+                    }, 1000);
 
-                $scope.onItemClicked = function(item) {
+                    return deferred.promise;
+                }
+
+                function onItemClicked(item) {
                     console.log(item);
-                };
+                }
 
-                $scope.toggleHeader = function() {
+                function toggleHeader() {
                     $scope.hideHeader = !$scope.hideHeader;
-                };
+                }
 
-                $scope.showItemInConsole = function(item) {
+                function showItemInConsole(item) {
                     console.log(item);
-                };
+                }
 
-                $scope.checkSelections = function() {
+                function checkSelections() {
                     console.log('checking selections');
-                };
+                }
 
-                $scope.sort = function(sortField, desc) {
+                function sort(sortField, desc) {
                     console.log(sortField, desc);
-                };
+                }
+
+                function onPagingChanged(pageIndex, pageSize) {
+                    $scope.data=[];
+                    loadData(pageIndex, pageSize);
+                }
 
                 function fn1(item) {
                     console.log(item.name);

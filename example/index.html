@@ -22,16 +22,16 @@
     </md-toolbar>
 
     <div flex class="table-container" layout="column">
-        <tw-ui-table line-number="true" flex data="data" sort-fn="sort" total-count="totalCount" is-loading="isLoading" load-more-fn="largeData" height-offset-value="heightOffsetValue" selectable="true" item-clicked="showItemInConsole" select-on-click="true"
-            selection-changed="checkSelections" selected-items="selectedItems" columns="columns" tooltip-fns="tooltipFns" item-commands="itemCommands" hide-header="hideHeader" compact="compact"></tw-ui-table>
+        <tw-ui-table paging="true" page-index="pageIndex" page-size="pageSize" on-paging-changed="onPagingChanged" line-number="true"
+            flex data="data" sort-fn="sort" total-count="totalCount" is-loading="loading" load-more-fn="largeData" height-offset-value="heightOffsetValue"
+            selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems"
+            columns="columns" tooltip-fns="tooltipFns" item-commands="itemCommands" hide-header="hideHeader" compact="compact"></tw-ui-table>
     </div>
 
-    <div class="md-padding command-line">
-        <md-button ng-click="addData()">add data</md-button>
-        <md-button ng-click="addColumn()">add column</md-button>
+    <div class="md-padding command-line">      
         <md-button ng-click="switch()">Switch</md-button>
         <md-button ng-click="toggleHeader()">Toggle Header</md-button>
-        <md-button ng-click="largeData()">10000 Rows</md-button>
+        <tw-ui-table-columns-picker columns="columns"></tw-ui-table-columns-picker>
     </div>
 
     <script src="../bower_components/angular/angular.js"></script>
@@ -39,7 +39,9 @@
     <script src="../bower_components/angular-aria/angular-aria.js"></script>
     <script src="../bower_components/angular-material/angular-material.js"></script>
     <script src="../bower_components/angular-messages/angular-messages.js"></script>
-    <script src="../dist/tw-ui-table.js"></script>
+    <script src="../bower_components/angular-sanitize/angular-sanitize.js"></script>
+
+    <script src="../dist/tw-ui-table.min.js"></script>
     <script src="example.js"></script>
 
 </body>

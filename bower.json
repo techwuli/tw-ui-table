@@ -3,7 +3,8 @@
   "description": "Data table implements the Material Design",
   "main": "tw-ui-table.js",
   "authors": [
-    "Zhao Yu <seal8216@hotmail.com>"
+    "Zhao Yu <zhaoyu@techwuli.com>",
+    "Huang Xianhong <xianhong@techwuli.com>"
   ],
   "license": "MIT",
   "keywords": [
@@ -13,10 +14,11 @@
   ],
   "homepage": "",
   "dependencies": {
-    "angular": "#1.5.9",
-    "angular-animate": "#1.5.9",
-    "angular-aria": "#1.5.9",
-    "angular-messages": "#1.5.9",
-    "angular-material": "#1.1.1"
+    "angular": "^1.6.4",
+    "angular-animate": "^1.6.4",
+    "angular-aria": "^1.6.4",
+    "angular-messages": "^1.6.4",
+    "angular-sanitize": "^1.6.4",
+    "angular-material": "^1.1.3"
   }
 }

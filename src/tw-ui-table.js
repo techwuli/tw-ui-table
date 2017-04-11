@@ -1,7 +1,8 @@
 (function () {
     'use strict';
-    angular.module('tw.ui.table', ['ngMaterial'])
-        .directive('twUiTable', twUiTable);
+    angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize'])
+        .directive('twUiTable', twUiTable)
+        .directive('twUiTableColumnsPicker', twUiTableColumnsPicker);
 
     function twUiTable() {
 
@@ -24,26 +25,31 @@
                 isLoading: '=?',
                 totalCount: '=?',
                 itemCommands: '=?',
-                lineNumber: '=?'
+                lineNumber: '=?',
+                paging: '=?',
+                pageIndex: '=?',
+                pageSize: '=?',
+                onPagingChanged: '=?'
             },
             controller: controller,
             templateUrl: '../src/tw-ui-table.html',
             link: link
         };
 
-        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout'];
+        controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout', '$sce'];
 
-        function controller($scope, $filter, $mdDialog, $window, $timeout) {
+        function controller($scope, $filter, $mdDialog, $window, $timeout, $sce) {
+
+            /* jshint -W071 */
+            /* jshint -W074 */
+
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.selectedItems = $scope.selectedItems || [];
             $scope.selectOnClick = $scope.selectOnClick || false;
-            $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
-            $scope.totalCount = $scope.totalCount || 10;
+            $scope.totalCount = $scope.totalCount || 0;
             $scope.itemCommands = $scope.itemCommands || {};
-
             $scope.sortField = '';
             $scope.sortDesc = false;
-
             $scope.isItemSelected = isItemSelected;
             $scope.toggleItemSelected = toggleItemSelected;
             $scope.onItemClicked = onItemClicked;
@@ -55,24 +61,96 @@
             $scope.runCommand = runCommand;
             $scope.onCellClicked = onCellClicked;
             $scope.tableId = new Date().getTime();
+            $scope.freezedColumns = [];
+            $scope.unFreezedColumns = [];
+            $scope.onPagingChanged = $scope.onPagingChanged || function () {};
+            $scope.getPages = getPages;
+            $scope.showPaginateNumber = showPaginateNumber;
+            $scope.showPaginateSymbol = showPaginateSymbol;
+            $scope.changePageIndex = changePageIndex;
+            $scope.previousPage = previousPage;
+            $scope.nextPage = nextPage;
+            $scope.pageSizeOptions = [20, 50, 'All'];
+            $scope.onPageSizeChanged = onPageSizeChanged;
 
             init();
 
             $timeout(function () {
                 var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
+                    $scope.tableId + ' .md-virtual-repeat-scroller'));
+
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
 
                 scroller.on('scroll', function (e) {
-                    headerContainer[0].scrollLeft = e.target.scrollLeft;
+                    if (headerContainer[0]) {
+                        headerContainer[0].scrollLeft = e.target.scrollLeft;
+                    }
+                    if (freezedContainer[0]) {
+                        freezedContainer[0].scrollTop = e.target.scrollTop;
+                    }
                 });
 
             });
 
+            function showPaginateSymbol(page) {
+                if (showPaginateNumber(page)) {
+                    return false;
+                }
+                if (Math.abs(page - $scope.pageIndex) === 3) {
+                    return true;
+                }
+            }
+
+            function showPaginateNumber(page) {
+                if (page === 0 || page === getPages().length - 1) {
+                    return true;
+                }
+
+                if (Math.abs(page - $scope.pageIndex) < 3) {
+                    return true;
+                }
+            }
+
+            function changePageIndex(page) {
+                if (page === $scope.pageIndex) {
+                    return;
+                }
+                changePaging(page, $scope.pageSize);
+            }
+
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
-                $scope.$watch('columns', calculateTableWidth, true);
+                $scope.$watch('columns', initColumns);
+            }
+
+            function onPageSizeChanged($event) {
+                changePaging(0, $scope.pageSize);
+            }
+
+            function getPages() {
+                var pages = [];
+                var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
+                for (var i = 0; i < pageCount; i++) {
+                    pages.push(i);
+                }
+                return pages;
+            }
+
+            function initColumns() {
+                $scope.freezedColumns = [];
+                $scope.unFreezedColumns = [];
+
+                angular.forEach($scope.columns, function (column) {
+                    if (column.freezed) {
+                        $scope.freezedColumns.push(column);
+                    } else {
+                        $scope.unFreezedColumns.push(column);
+                    }
+                });
+                calculateTableWidth();
             }
 
             function onSelectionChanged() {
@@ -86,31 +164,47 @@
             }
 
             function calculateTableWidth() {
-                var width = 0;
+                var freezedWidth = 0;
+                var unFreezedWidth = -32;
 
                 if ($scope.selectable) {
-                    width += 54;
+                    freezedWidth += 54;
                 }
 
                 angular.forEach($scope.columns, function (column) {
                     if (column.type === 'button') {
-                        width += 52;
+                        if (column.freezed) {
+                            freezedWidth += 52;
+                        } else {
+                            unFreezedWidth += 52;
+                        }
                     } else {
                         if ((!$scope.compact || !column.optional) && !column.hide) {
-                            column.size = column.size || 1;
-                            width += 75 * column.size + 56;
+                            if (column.freezed) {
+                                column.size = column.size || 1;
+                                freezedWidth += 75 * column.size + 56;
+                            } else {
+                                column.size = column.size || 1;
+                                unFreezedWidth += 75 * column.size + 56;
+                            }
                         }
                     }
                 });
 
-                width -= 32;
                 if ($scope.lineNumber) {
-                    width += 30;
+                    freezedWidth += 50;
                 }
 
-                $scope.containerStyle = 'min-width:' + width + 'px';
-                var headerWidth = width + 100;
-                $scope.headerStyle = 'min-width:' + headerWidth + 'px';
+                unFreezedWidth += 48;
+
+                $scope.freezedContainerStyle = 'min-width:' + freezedWidth + 'px';
+                var freezedHeaderWidth = freezedWidth;
+                $scope.freezedHeaderStyle = 'min-width:' + freezedHeaderWidth + 'px';
+
+                $scope.unFreezedContainerStyle = 'min-width:' + unFreezedWidth + 'px';
+                var unFreezedHeaderWidth = unFreezedWidth;
+                $scope.unFreezedHeaderStyle = 'min-width:' + unFreezedHeaderWidth + 'px';
+
                 $scope.$applyAsync();
             }
 
@@ -150,7 +244,7 @@
             }
 
             function getCellText(item, column) {
-                /* jshint maxcomplexity:11 */
+                /* jshint maxcomplexity:13 */
                 if (!column) {
                     throw 'column definition is not defined.';
                 }
@@ -191,7 +285,8 @@
 
                 if (typeof (column.render) === 'function') {
                     var resp = column.render(columnValue, item, column);
-                    return typeof (resp) === 'string' ? resp : '' + resp;
+                    var result = $sce.trustAsHtml(typeof (resp) === 'string' ? resp : '' + resp);
+                    return result;
                 }
 
                 return columnValue;
@@ -236,6 +331,20 @@
                     column.onClicked(item, $event);
                 }
             }
+
+            function previousPage() {
+                changePaging($scope.pageIndex - 1, $scope.pageSize);
+            }
+
+            function nextPage() {
+                changePaging($scope.pageIndex + 1, $scope.pageSize);
+            }
+
+            function changePaging(pageIndex, pageSize) {
+                $scope.pageIndex = pageIndex;
+                $scope.pageSize = pageSize;
+                $scope.onPagingChanged(pageIndex, pageSize);
+            }
         }
 
         function link(scope, element, attrs) {
@@ -244,4 +353,57 @@
 
         return directive;
     }
+
+    function twUiTableColumnsPicker() {
+        var directive = {
+            restrict: 'E',
+            controller: controller,
+            templateUrl: '../src/tw-ui-table-columns-picker.html',
+            scope: {
+                columns: '='
+            }
+        };
+
+        controller.$inject = ['$scope', '$mdDialog'];
+
+        function controller($scope, $mdDialog) {
+            $scope.showPicker = showPicker;
+            DialogController.$inject = ['$scope', '$mdDialog', 'columns'];
+
+            function showPicker($event) {
+                $mdDialog.show({
+                    controller: DialogController,
+                    parent: angular.element(document.body),
+                    targetEvent: $event,
+                    clickOutsideToClose: false,
+                    templateUrl: '../src/tw-ui-table-columns-picker-dialog.html',
+                    locals: {
+                        columns: $scope.columns
+                    }
+                });
+            }
+
+            function DialogController($scope, $mdDialog, columns) {
+                $scope.hide = hide;
+                $scope.cancel = cancel;
+                $scope.toggle = toggle;
+                $scope.columns = columns;
+
+                function hide() {
+                    $mdDialog.hide();
+                }
+
+                function cancel() {
+                    $mdDialog.cancel();
+                }
+
+                function toggle(column) {
+                    column.hide = !column.hide;
+                }
+            }
+        }
+
+        return directive;
+    }
+
 })();

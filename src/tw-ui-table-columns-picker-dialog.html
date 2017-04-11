@@ -1,0 +1,23 @@
+<md-dialog>
+    <md-toolbar>
+        <div class="md-toolbar-tools">
+            <h2>Choose Columns</h2>
+            <span flex></span>
+            <md-button class="md-icon-button" ng-click="cancel()">
+                <md-icon md-font-set="material-icons">close</md-icon>
+            </md-button>
+        </div>
+    </md-toolbar>
+    <md-dialog-content>
+        <div class="md-dialog-content">
+            <div ng-repeat="column in columns" ng-if="column.title">
+                <md-checkbox ng-disabled="!column.optional" ng-checked="!column.hide" ng-click="toggle(column)">
+                    {{column.title}}
+                </md-checkbox>
+            </div>
+        </div>
+    </md-dialog-content>
+    <md-dialog-actions>
+        <md-button ng-click="hide()" class="md-primary">close</md-button>
+    </md-dialog-actions>
+</md-dialog>
