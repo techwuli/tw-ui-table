@@ -36,7 +36,6 @@
 
             $scope.allAreSelected = allAreSelected;
             $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
-            $scope.data = $scope.data || [];
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
             $scope.getCellText = getCellText;
             $scope.isItemSelected = isItemSelected;
@@ -54,7 +53,6 @@
             $scope.toggleAll = toggleAll;
             $scope.toggleItemSelected = toggleItemSelected;
             $scope.totalCount = $scope.totalCount || 10;
-
             var loadLock = false;
             var previousLength = 0;
             init();
@@ -88,7 +86,6 @@
                         return $scope.data[index];
                     },
                     getLength: function () {
-
                         if (previousLength !== $scope.data.length) {
                             loadLock = false;
                             previousLength = $scope.data.length;
