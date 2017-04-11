@@ -8,22 +8,23 @@
         var directive = {
             restrict: 'E',
             scope: {
-                columns: '=',
-                compact: '=?',
                 data: '=',
-                defaultDateFormat: '@?',
-                heightOffsetValue: '=?',
-                hideHeader: '=',
-                itemClicked: '=?',
-                itemCommands: '=?',
-                lineNumber: '=?',
-                loadMoreFn: '=?',
-                selectOnClick: '=?',
+                columns: '=',
                 selectable: '=',
                 selectedItems: '=?',
                 selectionChanged: '=?',
+                itemClicked: '=?',
+                selectOnClick: '=?',
+                defaultDateFormat: '@?',
+                compact: '=?',
+                hideHeader: '=',
+                heightOffsetValue: '=?',
+                loadMoreFn: '=?',
                 sortFn: '=?',
+                isLoading: '=?',
                 totalCount: '=?',
+                itemCommands: '=?',
+                lineNumber: '=?'
             },
             controller: controller,
             templateUrl: '../src/tw-ui-table.html',
@@ -33,28 +34,28 @@
         controller.$inject = ['$scope', '$filter', '$mdDialog', '$window', '$timeout'];
 
         function controller($scope, $filter, $mdDialog, $window, $timeout) {
-
-            $scope.allAreSelected = allAreSelected;
-            $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.defaultDateFormat = $scope.defaultDateFormat || 'MM/dd/yyyy';
-            $scope.getCellText = getCellText;
-            $scope.isItemSelected = isItemSelected;
-            $scope.itemCommands = $scope.itemCommands || {};
-            $scope.loadMore = loadMore;
-            $scope.onCellClicked = onCellClicked;
-            $scope.onItemClicked = onItemClicked;
-            $scope.runCommand = runCommand;
-            $scope.selectOnClick = $scope.selectOnClick || false;
             $scope.selectedItems = $scope.selectedItems || [];
-            $scope.sort = sort;
-            $scope.sortDesc = false;
-            $scope.sortField = '';
-            $scope.tableId = new Date().getTime();
-            $scope.toggleAll = toggleAll;
-            $scope.toggleItemSelected = toggleItemSelected;
+            $scope.selectOnClick = $scope.selectOnClick || false;
+            $scope.containerStyle = $scope.containerStyle || 'wdith:100%;';
             $scope.totalCount = $scope.totalCount || 10;
-            var loadLock = false;
-            var previousLength = 0;
+            $scope.itemCommands = $scope.itemCommands || {};
+
+            $scope.sortField = '';
+            $scope.sortDesc = false;
+
+            $scope.isItemSelected = isItemSelected;
+            $scope.toggleItemSelected = toggleItemSelected;
+            $scope.onItemClicked = onItemClicked;
+            $scope.toggleAll = toggleAll;
+            $scope.allAreSelected = allAreSelected;
+            $scope.getCellText = getCellText;
+            $scope.loadMore = loadMore;
+            $scope.sort = sort;
+            $scope.runCommand = runCommand;
+            $scope.onCellClicked = onCellClicked;
+            $scope.tableId = new Date().getTime();
+
             init();
 
             $timeout(function () {
@@ -72,27 +73,6 @@
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
                 $scope.$watch('columns', calculateTableWidth, true);
-                $scope.dataSet = {
-                    getItemAtIndex: function (index) {
-                        if ($scope.data.length < $scope.totalCount &&
-                            $scope.data.length - index < 50 &&
-                            !loadLock &&
-                            $scope.loadMoreFn) {
-                            console.log('loading more: ' + index);
-                            loadLock = true;
-                            $scope.loadMoreFn();
-
-                        }
-                        return $scope.data[index];
-                    },
-                    getLength: function () {
-                        if (previousLength !== $scope.data.length) {
-                            loadLock = false;
-                            previousLength = $scope.data.length;
-                        }
-                        return $scope.data.length;
-                    }
-                };
             }
 
             function onSelectionChanged() {
@@ -170,7 +150,7 @@
             }
 
             function getCellText(item, column) {
-                /* jshint maxcomplexity:13 */
+                /* jshint maxcomplexity:11 */
                 if (!column) {
                     throw 'column definition is not defined.';
                 }
