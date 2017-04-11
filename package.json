@@ -1,29 +1,32 @@
 {
-    "name": "tw-ui-table",
-    "version": "0.4.21",
-    "description": "Data table implements the Material Design",
-    "main": "tw-ui-table.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "gulp serve-sync"
-    },
-    "keywords": [
-        "material",
-        "angular",
-        "table"
-    ],
-    "author": "Zhao Yu <seal8216@hotmail.com>",
-    "license": "MIT",
-    "devDependencies": {
-        "browser-sync": "^2.15.0",
-        "gulp": "^3.9.1",
-        "gulp-directive-replace": "^0.3.1",
-        "gulp-less": "^3.1.0",
-        "gulp-rename": "^1.2.2",
-        "gulp-uglify": "^2.0.0",
-        "gulp-util": "^3.0.7",
-        "less-plugin-autoprefix": "^1.5.1",
-        "less-plugin-clean-css": "^1.5.1",
-        "run-sequence": "^1.2.2"
-    }
+  "name": "tw-ui-table",
+  "version": "1.0.0",
+  "description": "Data table implements the Material Design",
+  "main": "tw-ui-table.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "gulp serve-sync"
+  },
+  "keywords": [
+    "material",
+    "angular",
+    "table"
+  ],
+  "authors": [
+    "Zhao Yu <zhaoyu@techwuli.com>",
+    "Huang Xianhong <xianhong@techwuli.com>"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "browser-sync": "^2.18.8",
+    "gulp": "^3.9.1",
+    "gulp-directive-replace": "^0.3.1",
+    "gulp-less": "^3.3.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^2.1.2",
+    "gulp-util": "^3.0.8",
+    "less-plugin-autoprefix": "^1.5.1",
+    "less-plugin-clean-css": "^1.5.1",
+    "run-sequence": "^1.2.2"
+  }
 }

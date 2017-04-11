@@ -127,8 +127,6 @@
             }
 
             function onPageSizeChanged($event) {
-                console.log('page size changed: ' + $scope.pageSize);
-
                 changePaging(0, $scope.pageSize);
             }
 
