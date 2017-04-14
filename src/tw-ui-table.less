@@ -55,9 +55,7 @@ tw-ui-table {
         flex-direction: column;
     }
     .tw-table-columns--freezed {
-        border-color: #EEE;
-        border-width: 0 1px 0 0;
-        border-style: solid;
+        transition: box-shadow .4s;
         flex-shrink: 0;
         .md-virtual-repeat-container {
             .table-container-freezed-placeholder {
@@ -205,5 +203,9 @@ tw-ui-table {
         display: flex;
         flex-direction: row;
         align-items: center;
+    }
+    .right-shadow {
+        box-sizing: border-box;
+        box-shadow: 5px 1px 10px -5px rgba(0, 0, 0, .2);
     }
 }

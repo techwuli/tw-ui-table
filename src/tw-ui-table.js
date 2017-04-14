@@ -83,12 +83,22 @@
                 var scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
 
+                var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
+
                 scroller.on('scroll', function (e) {
                     if (headerContainer[0]) {
                         headerContainer[0].scrollLeft = e.target.scrollLeft;
+                        if (freezed[0]) {
+                            if (e.target.scrollLeft === 0) {
+                                freezed[0].classList.remove('right-shadow');
+                            } else {
+                                freezed[0].classList.add('right-shadow');
+                            }
+                        }
                     }
                     if (freezedContainer[0]) {
                         freezedContainer[0].scrollTop = e.target.scrollTop;
+
                     }
                 });
 
