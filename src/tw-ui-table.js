@@ -73,6 +73,7 @@
             $scope.pageSizeOptions = [20, 50, 'All'];
             $scope.onPageSizeChanged = onPageSizeChanged;
             $scope.buttonDisabled = buttonDisabled;
+            $scope.Math = window.Math;
 
             init();
 
@@ -115,7 +116,7 @@
             }
 
             function showPaginateNumber(page) {
-                if (page === 0 || page === getPages().length - 1) {
+                if (page === 0 || page === Math.ceil($scope.totalCount / $scope.pageSize) - 1) {
                     return true;
                 }
 
@@ -142,13 +143,28 @@
             }
 
             function getPages() {
-                var pages = [];
+                $scope.pageIndex = $scope.pageIndex || 0;
+                var pages = [0];
                 var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
-                for (var i = 0; i < pageCount; i++) {
+                for (var i = $scope.pageIndex - 3; i <= $scope.pageIndex + 3; i++) {
+                    if (i <= 0) {
+                        continue;
+                    }
+
+                    if (i >= pageCount - 1) {
+                        continue;
+                    }
                     pages.push(i);
                 }
+
+                pages.push(pageCount - 1);
+
                 return pages;
+
+
             }
+
+
 
             function initColumns() {
                 $scope.freezedColumns = [];
