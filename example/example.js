@@ -31,7 +31,10 @@
                     icon: 'open_in_new',
                     tooltip: 'show name',
                     onClicked: fn1,
-                    freezed: true
+                    freezed: true,
+                    isDisabled: function (item) {
+                        return item.age % 2 !== 0;
+                    }
                 }, {
                     title: 'Name',
                     path: 'name',
@@ -75,6 +78,14 @@
                     size: 3,
                     render: function (val, item, column) {
                         return item.name + ' - ' + item.age;
+                    }
+                }, {
+                    type: 'button',
+                    icon: 'open_in_new',
+                    tooltip: 'show name',
+                    onClicked: fn1,
+                    isDisabled: function (item) {
+                        return item.age % 2 === 0;
                     }
                 }];
 
@@ -144,7 +155,7 @@
                 }
 
                 function onPagingChanged(pageIndex, pageSize) {
-                    $scope.data=[];
+                    $scope.data = [];
                     loadData(pageIndex, pageSize);
                 }
 

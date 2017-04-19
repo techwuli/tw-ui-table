@@ -72,6 +72,7 @@
             $scope.nextPage = nextPage;
             $scope.pageSizeOptions = [20, 50, 'All'];
             $scope.onPageSizeChanged = onPageSizeChanged;
+            $scope.buttonDisabled = buttonDisabled;
 
             init();
 
@@ -354,6 +355,12 @@
                 $scope.pageIndex = pageIndex;
                 $scope.pageSize = pageSize;
                 $scope.onPagingChanged(pageIndex, pageSize);
+            }
+
+            function buttonDisabled(item, column) {
+                if (column.isDisabled) {
+                    return column.isDisabled(item);
+                }
             }
         }
 
