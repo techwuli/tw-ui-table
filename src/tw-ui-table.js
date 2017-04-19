@@ -147,18 +147,15 @@
                 var pages = [0];
                 var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
                 for (var i = $scope.pageIndex - 3; i <= $scope.pageIndex + 3; i++) {
-                    if (i <= 0) {
-                        continue;
-                    }
-
-                    if (i >= pageCount - 1) {
+                    if (i <= 0 || i >= pageCount - 1) {
                         continue;
                     }
                     pages.push(i);
                 }
 
-                pages.push(pageCount - 1);
-
+                if (pageCount > 1) {
+                    pages.push(pageCount - 1);
+                }
                 return pages;
 
 
