@@ -1,7 +1,5 @@
 <div layout="row" flex>
-
     <div class="tw-table-columns--freezed" id="tw-table-freezed-{{tableId}}">
-
         <section layout="row" id="table-header-freezed-{{tableId}}" class="tw-table-header" ng-if="!hideHeader" style="{{freezedHeaderStyle}}">
             <div layout="row">
 
@@ -24,8 +22,8 @@
             </div>
         </section>
 
-        <md-virtual-repeat-container id="table-container-freezed-{{tableId}}" style="{{freezedContainerStyle}}">
-            <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
+        <div id="table-container-freezed-{{tableId}}" class="tw-table-body" style="{{freezedContainerStyle}}">
+            <div class="tw-table-row" layout="row" ng-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
                 ng-click="onItemClicked(item, $event)">
                 <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
                     {{$index+1+((pageIndex*pageSize)||0)}}
@@ -51,7 +49,7 @@
                 </div>
             </div>
             <div class="table-container-freezed-placeholder"></div>
-        </md-virtual-repeat-container>
+        </div>
 
 
     </div>
@@ -71,10 +69,9 @@
                 </div>
             </div>
         </section>
-        <md-virtual-repeat-container id="table-container-{{tableId}}">
-            <div style="{{unFreezedContainerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
+        <div id="table-container-{{tableId}}" ng-scrollbars ng-scrollbars-config="scrollbarsConfig" class="tw-table-body">
+            <div style="{{unFreezedContainerStyle}}" class="tw-table-row" layout="row" ng-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
                 ng-click="onItemClicked(item, $event)">
-
 
                 <div ng-repeat="column in unFreezedColumns" ng-show="(!compact||!column.optional) && !column.hide" class="tw-table-cell x{{column.size}}"
                     ng-class="{'tw-table-button-cell':column.type==='button', 'numeric':column.numeric,'tw-table-text-cell':column.type!=='button'}">
@@ -87,8 +84,7 @@
                         <md-icon md-font-set="material-icons">{{column.icon}}</md-icon>
                     </md-button>
                     <span ng-click="onCellClicked($event, item, column)" ng-if="column.type!=='button'" ng-class="{'clickable':column.onClicked}"
-                        ng-bind-html="getCellText(item, column)" class="cell-text">
-                </span>
+                        ng-bind-html="getCellText(item, column)" class="cell-text"></span>
                 </div>
             </div>
 
@@ -97,7 +93,7 @@
                 <md-progress-circular md-mode="indeterminate" ng-show="isLoading"></md-progress-circular>
                 <span class="md-caption" ng-show="totalCount==0&&!isLoading">No item found.</span>
             </div>
-        </md-virtual-repeat-container>
+        </div>
     </div>
 </div>
 

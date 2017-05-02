@@ -57,22 +57,15 @@ tw-ui-table {
     .tw-table-columns--freezed {
         transition: box-shadow .4s;
         flex-shrink: 0;
-        .md-virtual-repeat-container {
-            .table-container-freezed-placeholder {
-                height: 100px;
-            }
-            .md-virtual-repeat-scroller {
-                overflow: hidden;
-            }
+        .tw-table-body {
+            overflow-y: hidden;
+            padding-bottom: 100px;
         }
     }
     .tw-table-columns {
-        overflow: auto;
-    }
-    .md-virtual-repeat-container {
-        flex-grow: 1;
-        .md-virtual-repeat-scroller {
-            overflow-x: auto;
+        overflow: hidden;
+        .tw-table-body {
+            flex-grow: 1;
             overflow-y: auto;
         }
     }
@@ -86,6 +79,7 @@ tw-ui-table {
         font-weight: @font-weight-medium;
         height: 56px;
         overflow: hidden;
+        flex-shrink: 0;
     }
     .tw-table-cell {
         display: flex;

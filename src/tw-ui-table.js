@@ -1,11 +1,24 @@
 (function () {
     'use strict';
-    angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize'])
+    angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize', 'ngScrollbars'])
+        .config(config)
         .directive('twUiTable', twUiTable)
         .directive('twUiTableColumnsPicker', twUiTableColumnsPicker);
 
-    function twUiTable() {
+    config.$inject = ['ScrollBarsProvider'];
 
+    function config(ScrollBarsProvider) {
+        ScrollBarsProvider.defaults = {
+            autoHideScrollbar: true,
+            theme: 'minimal-dark',
+            axis: 'yx',
+            scrollInertia: 300
+        };
+    }
+
+    twUiTable.$inject = ['$window'];
+
+    function twUiTable($window) {
         var directive = {
             restrict: 'E',
             scope: {
@@ -60,7 +73,6 @@
             $scope.sort = sort;
             $scope.runCommand = runCommand;
             $scope.onCellClicked = onCellClicked;
-            $scope.tableId = new Date().getTime();
             $scope.freezedColumns = [];
             $scope.unFreezedColumns = [];
             $scope.onPagingChanged = $scope.onPagingChanged || function () {};
@@ -75,36 +87,56 @@
             $scope.buttonDisabled = buttonDisabled;
             $scope.Math = window.Math;
 
-            init();
 
-            $timeout(function () {
-                var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
-                    $scope.tableId + ' .md-virtual-repeat-scroller'));
 
-                var scroller = angular.element(document.querySelector('#table-container-' +
-                    $scope.tableId + ' .md-virtual-repeat-scroller'));
+            $scope.scrollbarsConfig = {
+                callbacks: {
+                    whileScrolling: function () {
+                        var headerContainer = angular.element(document.getElementById('table-header-' + $scope.tableId));
+                        var freezedContainer = angular.element(document.getElementById('table-container-freezed-' + $scope.tableId));
+                        var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
+                        if (headerContainer[0]) {
+                            headerContainer[0].scrollLeft = -this.mcs.left;
+                        }
 
-                var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
-
-                scroller.on('scroll', function (e) {
-                    if (headerContainer[0]) {
-                        headerContainer[0].scrollLeft = e.target.scrollLeft;
                         if (freezed[0]) {
-                            if (e.target.scrollLeft === 0) {
+                            if (this.mcs.left === 0) {
                                 freezed[0].classList.remove('right-shadow');
                             } else {
                                 freezed[0].classList.add('right-shadow');
                             }
                         }
-                    }
-                    if (freezedContainer[0]) {
-                        freezedContainer[0].scrollTop = e.target.scrollTop;
 
+                        if (freezedContainer[0]) {
+                            freezedContainer[0].scrollTop = -this.mcs.top;
+                        }
                     }
-                });
+                }
+            };
 
-            });
+            init();
+
+            // $timeout(function () {
+            //     var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+            //     var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId));
+            //     var scroller = angular.element(document.querySelector('#table-container-' + $scope.tableId + ' .mCustomScrollBox'));
+            //     var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
+            //     scroller.on('scroll', function (e) {
+            //         if (headerContainer[0]) {
+            //             headerContainer[0].scrollLeft = e.target.scrollLeft;
+            //             if (freezed[0]) {
+            //                 if (e.target.scrollLeft === 0) {
+            //                     freezed[0].classList.remove('right-shadow');
+            //                 } else {
+            //                     freezed[0].classList.add('right-shadow');
+            //                 }
+            //             }
+            //         }
+            //         if (freezedContainer[0]) {
+            //             freezedContainer[0].scrollTop = e.target.scrollTop;
+            //         }
+            //     });
+            // });
 
             function showPaginateSymbol(page) {
                 if (showPaginateNumber(page)) {
@@ -157,11 +189,7 @@
                     pages.push(pageCount - 1);
                 }
                 return pages;
-
-
             }
-
-
 
             function initColumns() {
                 $scope.freezedColumns = [];
@@ -378,7 +406,29 @@
         }
 
         function link(scope, element, attrs) {
+            scope.tableId = new Date().getTime();
+            element.attr('id', scope.tableId);
+            angular.element(document.getElementById(scope.tableId))
+                .ready(function () {
+                    calcTableHeight(scope);
+                });
 
+            angular.element($window).bind('resize', function () {
+                calcTableHeight(scope);
+            })
+        }
+
+        function calcTableHeight(scope) {
+
+            var contentHeight = document.getElementById(scope.tableId).clientHeight;
+            if (!scope.hideHeader) {
+                contentHeight -= 56;
+            }
+            if (scope.paging) {
+                contentHeight -= 57;
+            }
+
+            document.getElementById('table-container-' + scope.tableId).style.height = contentHeight + 'px';
         }
 
         return directive;

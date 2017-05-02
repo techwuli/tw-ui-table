@@ -1,11 +1,24 @@
 (function () {
     'use strict';
-    angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize'])
+    angular.module('tw.ui.table', ['ngMaterial', 'ngSanitize', 'ngScrollbars'])
+        .config(config)
         .directive('twUiTable', twUiTable)
         .directive('twUiTableColumnsPicker', twUiTableColumnsPicker);
 
-    function twUiTable() {
+    config.$inject = ['ScrollBarsProvider'];
 
+    function config(ScrollBarsProvider) {
+        ScrollBarsProvider.defaults = {
+            autoHideScrollbar: true,
+            theme: 'minimal-dark',
+            axis: 'yx',
+            scrollInertia: 300
+        };
+    }
+
+    twUiTable.$inject = ['$window'];
+
+    function twUiTable($window) {
         var directive = {
             restrict: 'E',
             scope: {
@@ -32,7 +45,7 @@
                 onPagingChanged: '=?'
             },
             controller: controller,
-            template: '<div layout=\"row\" flex><div class=\"tw-table-columns--freezed\" id=\"tw-table-freezed-{{tableId}}\"><section layout=\"row\" id=\"table-header-freezed-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\" style=\"{{freezedHeaderStyle}}\"><div layout=\"row\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\"></div><div class=\"tw-table-cell tw-table-check-cell\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) && !column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in freezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-freezed-{{tableId}}\" style=\"{{freezedContainerStyle}}\"><div class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\">{{$index+1+((pageIndex*pageSize)||0)}}</div><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-check-cell\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in freezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\' && !column.hideButton(item)\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\" ng-disabled=\"buttonDisabled(item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"table-container-freezed-placeholder\"></div></md-virtual-repeat-container></div><div class=\"tw-table-columns\" flex><section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{unFreezedHeaderStyle}}\"><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) && !column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in unFreezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><md-virtual-repeat-container id=\"table-container-{{tableId}}\"><div style=\"{{unFreezedContainerStyle}}\" class=\"tw-table-row\" layout=\"row\" md-virtual-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-repeat=\"column in unFreezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\" ng-disabled=\"buttonDisabled(item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-if=\"!paging\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></md-virtual-repeat-container></div></div><div ng-show=\"paging\" class=\"tw-ui-table-pagination\"><div class=\"paginate-section\"><label>Rows per page:</label><md-select ng-model=\"pageSize\" ng-change=\"onPageSizeChanged($event)\" aria-label=\"on change page size\" ng-disabled=\"isLoading\" class=\"md-no-underline\"><md-option value=\"20\">20</md-option><md-option value=\"50\">50</md-option><md-option ng-value=\"totalCount\">All</md-option></md-select></div><div class=\"paginate-section\"><span>{{pageIndex*pageSize+1}} - {{ Math.min((pageIndex+1)*pageSize,totalCount) }} of {{totalCount}}</span></div><div class=\"paginate-section\"><md-button class=\"md-icon-button\" ng-click=\"previousPage()\" ng-disabled=\"isLoading || pageIndex===0\"><md-icon md-font-set=\"material-icons\">keyboard_arrow_left</md-icon></md-button><div class=\"page-indicator\" ng-repeat=\"page in getPages()\"><span class=\"paginate-symbol\" ng-if=\"showPaginateSymbol(page)\">...</span><md-button ng-disabled=\"isLoading\" ng-click=\"changePageIndex(page)\" class=\"paginate-number\" ng-if=\"showPaginateNumber(page)\" ng-class=\"{\'current\':page===pageIndex}\">{{page+1}}</md-button></div><md-button class=\"md-icon-button\" ng-click=\"nextPage()\" ng-disabled=\"isLoading || (pageIndex+1)>=getPages().length\"><md-icon md-font-set=\"material-icons\">keyboard_arrow_right</md-icon></md-button></div></div>',
+            template: '<div layout=\"row\" flex><div class=\"tw-table-columns--freezed\" id=\"tw-table-freezed-{{tableId}}\"><section layout=\"row\" id=\"table-header-freezed-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\" style=\"{{freezedHeaderStyle}}\"><div layout=\"row\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\"></div><div class=\"tw-table-cell tw-table-check-cell\" ng-if=\"selectable\"><md-checkbox aria-label=\"check all\" ng-checked=\"allAreSelected()\" ng-click=\"toggleAll()\"></div><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) && !column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in freezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><div id=\"table-container-freezed-{{tableId}}\" class=\"tw-table-body\" style=\"{{freezedContainerStyle}}\"><div class=\"tw-table-row\" layout=\"row\" ng-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div class=\"tw-table-cell tw-table-line-number-cell\" ng-if=\"lineNumber\">{{$index+1+((pageIndex*pageSize)||0)}}</div><div ng-if=\"selectable\" class=\"tw-table-cell tw-table-check-cell\"><md-checkbox aria-label=\"select\" ng-checked=\"isItemSelected(item)\" ng-click=\"toggleItemSelected(item, $event)\"></div><div ng-repeat=\"column in freezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\' && !column.hideButton(item)\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\" ng-disabled=\"buttonDisabled(item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"table-container-freezed-placeholder\"></div></div></div><div class=\"tw-table-columns\" flex><section layout=\"row\" id=\"table-header-{{tableId}}\" class=\"tw-table-header\" ng-if=\"!hideHeader\"><div layout=\"row\" style=\"{{unFreezedHeaderStyle}}\"><div class=\"tw-table-cell x{{column.size}}\" ng-show=\"(!compact||!column.optional) && !column.hide\" ng-class=\"{\'numeric\':column.numeric,\'tw-table-button-cell\':column.type===\'button\',\'tw-table-text-cell\':column.type!==\'button\'}\" ng-repeat=\"column in unFreezedColumns\"><div ng-if=\"column.sortable\" ng-click=\"sort(column)\" class=\"sort-handler\"><span>{{column.title}}</span><md-icon ng-show=\"sortField===column.path && sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_down</md-icon><md-icon ng-show=\"sortField===column.path && !sortDesc\" md-font-set=\"material-icons\">keyboard_arrow_up</md-icon></div><span ng-if=\"!column.sortable\">{{column.title}}</span></div></div></section><div id=\"table-container-{{tableId}}\" ng-scrollbars ng-scrollbars-config=\"scrollbarsConfig\" class=\"tw-table-body\"><div style=\"{{unFreezedContainerStyle}}\" class=\"tw-table-row\" layout=\"row\" ng-repeat=\"item in data\" ng-class=\"{\'selected\':isItemSelected(item), \'clickable\':itemClicked}\" ng-click=\"onItemClicked(item, $event)\"><div ng-repeat=\"column in unFreezedColumns\" ng-show=\"(!compact||!column.optional) && !column.hide\" class=\"tw-table-cell x{{column.size}}\" ng-class=\"{\'tw-table-button-cell\':column.type===\'button\', \'numeric\':column.numeric,\'tw-table-text-cell\':column.type!==\'button\'}\"><md-tooltip ng-if=\"column.tooltip && !column.tooltipFn\">{{column.tooltip}}</md-tooltip><md-tooltip ng-if=\"column.tooltipFn\">{{column.tooltipFn(item)}}</md-tooltip><md-button ng-if=\"column.type===\'button\'\" class=\"md-icon-button md-primary\" ng-click=\"onCellClicked($event, item, column)\" ng-disabled=\"buttonDisabled(item, column)\"><md-icon md-font-set=\"material-icons\">{{column.icon}}</md-icon></md-button><span ng-click=\"onCellClicked($event, item, column)\" ng-if=\"column.type!==\'button\'\" ng-class=\"{\'clickable\':column.onClicked}\" ng-bind-html=\"getCellText(item, column)\" class=\"cell-text\"></span></div></div><div class=\"md-padding\" layout=\"row\" layout-align=\"center center\"><md-button class=\"md-primary\" ng-if=\"!paging\" ng-click=\"loadMore()\" ng-show=\"data.length<totalCount&&!isLoading\">Load More</md-button><md-progress-circular md-mode=\"indeterminate\" ng-show=\"isLoading\"></md-progress-circular><span class=\"md-caption\" ng-show=\"totalCount==0&&!isLoading\">No item found.</span></div></div></div></div><div ng-show=\"paging\" class=\"tw-ui-table-pagination\"><div class=\"paginate-section\"><label>Rows per page:</label><md-select ng-model=\"pageSize\" ng-change=\"onPageSizeChanged($event)\" aria-label=\"on change page size\" ng-disabled=\"isLoading\" class=\"md-no-underline\"><md-option value=\"20\">20</md-option><md-option value=\"50\">50</md-option><md-option ng-value=\"totalCount\">All</md-option></md-select></div><div class=\"paginate-section\"><span>{{pageIndex*pageSize+1}} - {{ Math.min((pageIndex+1)*pageSize,totalCount) }} of {{totalCount}}</span></div><div class=\"paginate-section\"><md-button class=\"md-icon-button\" ng-click=\"previousPage()\" ng-disabled=\"isLoading || pageIndex===0\"><md-icon md-font-set=\"material-icons\">keyboard_arrow_left</md-icon></md-button><div class=\"page-indicator\" ng-repeat=\"page in getPages()\"><span class=\"paginate-symbol\" ng-if=\"showPaginateSymbol(page)\">...</span><md-button ng-disabled=\"isLoading\" ng-click=\"changePageIndex(page)\" class=\"paginate-number\" ng-if=\"showPaginateNumber(page)\" ng-class=\"{\'current\':page===pageIndex}\">{{page+1}}</md-button></div><md-button class=\"md-icon-button\" ng-click=\"nextPage()\" ng-disabled=\"isLoading || (pageIndex+1)>=getPages().length\"><md-icon md-font-set=\"material-icons\">keyboard_arrow_right</md-icon></md-button></div></div>',
             link: link
         };
 
@@ -60,7 +73,6 @@
             $scope.sort = sort;
             $scope.runCommand = runCommand;
             $scope.onCellClicked = onCellClicked;
-            $scope.tableId = new Date().getTime();
             $scope.freezedColumns = [];
             $scope.unFreezedColumns = [];
             $scope.onPagingChanged = $scope.onPagingChanged || function () {};
@@ -75,36 +87,56 @@
             $scope.buttonDisabled = buttonDisabled;
             $scope.Math = window.Math;
 
-            init();
 
-            $timeout(function () {
-                var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
-                    $scope.tableId + ' .md-virtual-repeat-scroller'));
 
-                var scroller = angular.element(document.querySelector('#table-container-' +
-                    $scope.tableId + ' .md-virtual-repeat-scroller'));
+            $scope.scrollbarsConfig = {
+                callbacks: {
+                    whileScrolling: function () {
+                        var headerContainer = angular.element(document.getElementById('table-header-' + $scope.tableId));
+                        var freezedContainer = angular.element(document.getElementById('table-container-freezed-' + $scope.tableId));
+                        var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
+                        if (headerContainer[0]) {
+                            headerContainer[0].scrollLeft = -this.mcs.left;
+                        }
 
-                var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
-
-                scroller.on('scroll', function (e) {
-                    if (headerContainer[0]) {
-                        headerContainer[0].scrollLeft = e.target.scrollLeft;
                         if (freezed[0]) {
-                            if (e.target.scrollLeft === 0) {
+                            if (this.mcs.left === 0) {
                                 freezed[0].classList.remove('right-shadow');
                             } else {
                                 freezed[0].classList.add('right-shadow');
                             }
                         }
-                    }
-                    if (freezedContainer[0]) {
-                        freezedContainer[0].scrollTop = e.target.scrollTop;
 
+                        if (freezedContainer[0]) {
+                            freezedContainer[0].scrollTop = -this.mcs.top;
+                        }
                     }
-                });
+                }
+            };
 
-            });
+            init();
+
+            // $timeout(function () {
+            //     var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+            //     var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' + $scope.tableId));
+            //     var scroller = angular.element(document.querySelector('#table-container-' + $scope.tableId + ' .mCustomScrollBox'));
+            //     var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
+            //     scroller.on('scroll', function (e) {
+            //         if (headerContainer[0]) {
+            //             headerContainer[0].scrollLeft = e.target.scrollLeft;
+            //             if (freezed[0]) {
+            //                 if (e.target.scrollLeft === 0) {
+            //                     freezed[0].classList.remove('right-shadow');
+            //                 } else {
+            //                     freezed[0].classList.add('right-shadow');
+            //                 }
+            //             }
+            //         }
+            //         if (freezedContainer[0]) {
+            //             freezedContainer[0].scrollTop = e.target.scrollTop;
+            //         }
+            //     });
+            // });
 
             function showPaginateSymbol(page) {
                 if (showPaginateNumber(page)) {
@@ -157,11 +189,7 @@
                     pages.push(pageCount - 1);
                 }
                 return pages;
-
-
             }
-
-
 
             function initColumns() {
                 $scope.freezedColumns = [];
@@ -378,7 +406,29 @@
         }
 
         function link(scope, element, attrs) {
+            scope.tableId = new Date().getTime();
+            element.attr('id', scope.tableId);
+            angular.element(document.getElementById(scope.tableId))
+                .ready(function () {
+                    calcTableHeight(scope);
+                });
 
+            angular.element($window).bind('resize', function () {
+                calcTableHeight(scope);
+            })
+        }
+
+        function calcTableHeight(scope) {
+
+            var contentHeight = document.getElementById(scope.tableId).clientHeight;
+            if (!scope.hideHeader) {
+                contentHeight -= 56;
+            }
+            if (scope.paging) {
+                contentHeight -= 57;
+            }
+
+            document.getElementById('table-container-' + scope.tableId).style.height = contentHeight + 'px';
         }
 
         return directive;
