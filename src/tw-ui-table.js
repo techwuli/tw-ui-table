@@ -135,7 +135,7 @@
             function init() {
                 $scope.$watchCollection('selectedItems', onSelectionChanged);
                 $scope.$watch('compact', calculateTableWidth);
-                $scope.$watch('columns', initColumns);
+                $scope.$watch('columns', initColumns, true);
             }
 
             function onPageSizeChanged($event) {
@@ -157,11 +157,7 @@
                     pages.push(pageCount - 1);
                 }
                 return pages;
-
-
             }
-
-
 
             function initColumns() {
                 $scope.freezedColumns = [];
