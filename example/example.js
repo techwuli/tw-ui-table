@@ -116,7 +116,7 @@
                         var data = [];
                         for (var i = pageIndex * pageSize; i < (pageIndex + 1) * pageSize; i++) {
                             data.push({
-                                name: 'Demo name ' + i,
+                                name: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem consequuntur autem obcaecati pariatur maiores temporibus reiciendis esse quidem incidunt veritatis. Facilis nihil, sit odit consequuntur! Praesentium commodi laboriosam obcaecati delectus. ' + i,
                                 gender: i % 2 === 0 ? 'Male' : 'Female',
                                 age: i % 70,
                                 phone: '83874982375',
