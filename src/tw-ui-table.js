@@ -29,7 +29,8 @@
                 paging: '=?',
                 pageIndex: '=?',
                 pageSize: '=?',
-                onPagingChanged: '=?'
+                onPagingChanged: '=?',
+                highlightFn: '=?'
             },
             controller: controller,
             templateUrl: '../src/tw-ui-table.html',
@@ -74,6 +75,7 @@
             $scope.onPageSizeChanged = onPageSizeChanged;
             $scope.buttonDisabled = buttonDisabled;
             $scope.Math = window.Math;
+            $scope.isItemHighlighted = isItemHighlighted;
 
             init();
 
@@ -105,6 +107,12 @@
                 });
 
             });
+
+            function isItemHighlighted(item) {
+                if ($scope.highlightFn) {
+                    return $scope.highlightFn(item);
+                }
+            }
 
             function showPaginateSymbol(page) {
                 if (showPaginateNumber(page)) {

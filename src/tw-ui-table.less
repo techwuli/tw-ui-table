@@ -196,6 +196,22 @@ tw-ui-table {
         &.clickable {
             cursor: pointer;
         }
+        &.highlight {
+            background-color: #FFE0B2;
+            &.selected:hover,
+            &:hover {
+                background-color: #FFB74D;
+                .tw-table-cell {
+                    background-color: #FFB74D;
+                }
+            }
+            &.selected {
+                background-color: #FFCC80;
+                .tw-table-cell {
+                    background-color: #FFCC80;
+                }
+            }
+        }
     }
     md-checkbox {
         margin-bottom: 0;

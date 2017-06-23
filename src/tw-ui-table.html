@@ -25,7 +25,7 @@
         </section>
 
         <md-virtual-repeat-container id="table-container-freezed-{{tableId}}" style="{{freezedContainerStyle}}">
-            <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
+            <div class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item),'clickable':itemClicked,'highlight':isItemHighlighted(item)}"
                 ng-click="onItemClicked(item, $event)">
                 <div class="tw-table-cell tw-table-line-number-cell" ng-if="lineNumber">
                     {{$index+1+((pageIndex*pageSize)||0)}}
@@ -72,7 +72,7 @@
             </div>
         </section>
         <md-virtual-repeat-container id="table-container-{{tableId}}">
-            <div style="{{unFreezedContainerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item), 'clickable':itemClicked}"
+            <div style="{{unFreezedContainerStyle}}" class="tw-table-row" layout="row" md-virtual-repeat="item in data" ng-class="{'selected':isItemSelected(item),'clickable':itemClicked,'highlight':isItemHighlighted(item)}"
                 ng-click="onItemClicked(item, $event)">
 
 

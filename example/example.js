@@ -25,6 +25,7 @@
                 $scope.checkSelections = checkSelections;
                 $scope.sort = sort;
                 $scope.onPagingChanged = onPagingChanged;
+                $scope.highlightFn = highlightFn;
 
                 $scope.columns = [{
                     type: 'button',
@@ -108,6 +109,10 @@
                         $scope.pageSize = data.pageSize;
                         $scope.totalCount = data.totalCount;
                     });
+                }
+
+                function highlightFn(item) {
+                    return item.age === 2;
                 }
 
                 function fetchData(pageIndex, pageSize) {

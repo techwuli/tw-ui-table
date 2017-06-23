@@ -25,10 +25,11 @@
         <tw-ui-table paging="true" page-index="pageIndex" page-size="pageSize" on-paging-changed="onPagingChanged" line-number="true"
             flex data="data" sort-fn="sort" total-count="totalCount" is-loading="loading" load-more-fn="largeData" height-offset-value="heightOffsetValue"
             selectable="true" item-clicked="showItemInConsole" select-on-click="true" selection-changed="checkSelections" selected-items="selectedItems"
-            columns="columns" tooltip-fns="tooltipFns" item-commands="itemCommands" hide-header="hideHeader" compact="compact"></tw-ui-table>
+            columns="columns" tooltip-fns="tooltipFns" item-commands="itemCommands" hide-header="hideHeader" compact="compact"
+            highlight-fn="highlightFn"></tw-ui-table>
     </div>
 
-    <div class="md-padding command-line">      
+    <div class="md-padding command-line">
         <md-button ng-click="switch()">Switch</md-button>
         <md-button ng-click="toggleHeader()">Toggle Header</md-button>
         <tw-ui-table-columns-picker columns="columns"></tw-ui-table-columns-picker>
