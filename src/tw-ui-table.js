@@ -94,7 +94,6 @@
                 container = angular.element(document.getElementById('container-' + $scope.tableId));
                 console.log(container[0]);
                 container.on('mousewheel', function (e) {
-                    console.log(e);
                     if (e.preventDefault) {
                         e.preventDefault();
                     }
