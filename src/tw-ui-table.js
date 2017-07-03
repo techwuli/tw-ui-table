@@ -77,36 +77,65 @@
             $scope.Math = window.Math;
             $scope.isItemHighlighted = isItemHighlighted;
 
+            var headerContainer, freezedContainer, scroller, freezed, container;
+
             init();
 
             $timeout(function () {
-                var headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
-                var freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
+                headerContainer = angular.element(document.querySelector('#table-header-' + $scope.tableId));
+                freezedContainer = angular.element(document.querySelector('#table-container-freezed-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
 
-                var scroller = angular.element(document.querySelector('#table-container-' +
+                scroller = angular.element(document.querySelector('#table-container-' +
                     $scope.tableId + ' .md-virtual-repeat-scroller'));
 
-                var freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
+                freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
 
-                scroller.on('scroll', function (e) {
-                    if (headerContainer[0]) {
-                        headerContainer[0].scrollLeft = e.target.scrollLeft;
-                        if (freezed[0]) {
-                            if (e.target.scrollLeft === 0) {
-                                freezed[0].classList.remove('right-shadow');
-                            } else {
-                                freezed[0].classList.add('right-shadow');
-                            }
-                        }
+                container = angular.element(document.getElementById('container-' + $scope.tableId));
+                console.log(container[0]);
+                container.on('mousewheel', function (e) {
+                    console.log(e);
+                    if (e.preventDefault) {
+                        e.preventDefault();
                     }
-                    if (freezedContainer[0]) {
-                        freezedContainer[0].scrollTop = e.target.scrollTop;
+                    if (e.stopPropagation) {
+                        e.stopPropagation();
+                    }
 
+                    if (scroller[0]) {
+                        scroller[0].scrollTop = scroller[0].scrollTop + e.deltaY;
                     }
+
                 });
 
+                scroller.on('scroll', onScrollerScrolls);
+                // freezedContainer.on('scroll', onFreezedContainerScrolls);
             });
+
+            function onScrollerScrolls(e) {
+
+                e.preventDefault();
+                if (headerContainer[0]) {
+                    headerContainer[0].scrollLeft = e.target.scrollLeft;
+                    if (freezed[0]) {
+                        if (e.target.scrollLeft === 0) {
+                            freezed[0].classList.remove('right-shadow');
+                        } else {
+                            freezed[0].classList.add('right-shadow');
+                        }
+                    }
+                }
+                if (freezedContainer[0]) {
+                    freezedContainer[0].scrollTop = e.target.scrollTop;
+                }
+            }
+
+            function onFreezedContainerScrolls(e) {
+                e.preventDefault();
+                if (scroller[0]) {
+                    scroller[0].scrollTop = e.target.scrollTop;
+                }
+            }
 
             function isItemHighlighted(item) {
                 if ($scope.highlightFn) {
