@@ -92,7 +92,7 @@
                 freezed = angular.element(document.getElementById('tw-table-freezed-' + $scope.tableId));
 
                 container = angular.element(document.getElementById('container-' + $scope.tableId));
-                console.log(container[0]);
+               
                 container.on('mousewheel', function (e) {
                     if (e.preventDefault) {
                         e.preventDefault();
