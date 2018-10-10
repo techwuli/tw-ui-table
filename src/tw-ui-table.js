@@ -40,8 +40,9 @@
                 itemCommands: '=?',
                 lineNumber: '=?',
                 paging: '=?',
-                pageIndex: '=?',
+                pageIndex: '=?', // simple, number(default)
                 pageSize: '=?',
+                pageType: '=?',
                 onPagingChanged: '=?'
             },
             controller: controller,
@@ -86,6 +87,7 @@
             $scope.onPageSizeChanged = onPageSizeChanged;
             $scope.buttonDisabled = buttonDisabled;
             $scope.Math = window.Math;
+            $scope.pageType = $scope.pageType || 'number';
 
 
 
@@ -177,16 +179,23 @@
             function getPages() {
                 $scope.pageIndex = $scope.pageIndex || 0;
                 var pages = [0];
-                var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
-                for (var i = $scope.pageIndex - 3; i <= $scope.pageIndex + 3; i++) {
-                    if (i <= 0 || i >= pageCount - 1) {
-                        continue;
+                if($scope.pageType=='number') {
+                    var pageCount = Math.ceil($scope.totalCount / $scope.pageSize);
+                    for (var i = $scope.pageIndex - 3; i <= $scope.pageIndex + 3; i++) {
+                        if (i <= 0 || i >= pageCount - 1) {
+                            continue;
+                        }
+                        pages.push(i);
                     }
-                    pages.push(i);
-                }
 
-                if (pageCount > 1) {
-                    pages.push(pageCount - 1);
+                    if (pageCount > 1) {
+                        pages.push(pageCount - 1);
+                    }
+                } else {
+                    var pageCount = data.length==pageSize?pageIndex+1:pageIndex;
+                    for(var i=1; i<pageCount; i++) {
+                        pages.push(i);
+                    }
                 }
                 return pages;
             }
