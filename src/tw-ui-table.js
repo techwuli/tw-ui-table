@@ -40,9 +40,9 @@
                 itemCommands: '=?',
                 lineNumber: '=?',
                 paging: '=?',
-                pageIndex: '=?', // simple, number(default)
+                pageIndex: '=?',
                 pageSize: '=?',
-                pageType: '=?',
+                pageType: '=?', // simple, number(default)
                 onPagingChanged: '=?'
             },
             controller: controller,
@@ -192,8 +192,8 @@
                         pages.push(pageCount - 1);
                     }
                 } else {
-                    var pageCount = data.length==pageSize?pageIndex+1:pageIndex;
-                    for(var i=1; i<pageCount; i++) {
+                    var pageCount = ($scope.data && $scope.data.length==$scop.epageSize)?$scope.pageIndex+1:$scope.pageIndex;
+                    for(var i=1; i<=pageCount; i++) {
                         pages.push(i);
                     }
                 }

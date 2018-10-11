@@ -104,11 +104,11 @@
             class="md-no-underline">
             <md-option value="20">20</md-option>
             <md-option value="50">50</md-option>
-            <md-option ng-value="totalCount">All</md-option>
+            <md-option ng-if="pageType=='number'" ng-value="totalCount">All</md-option>
         </md-select>
     </div>
 
-    <div class="paginate-section" ng-show="pageType=='number'">
+    <div class="paginate-section" ng-if="pageType=='number'">
         <span>{{pageIndex*pageSize+1}} - {{ Math.min((pageIndex+1)*pageSize,totalCount) }} of {{totalCount}}</span>
     </div>
 
@@ -116,7 +116,7 @@
         <md-button class="md-icon-button" ng-click="previousPage()" ng-disabled="isLoading || pageIndex===0">
             <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
         </md-button>
-        <div class="page-indicator" ng-repeat="page in getPages()" ng-show="pageType=='number'">
+        <div class="page-indicator" ng-repeat="page in getPages()" ng-if="pageType=='number'">
             <span class="paginate-symbol" ng-if="showPaginateSymbol(page)">...</span>
             <md-button ng-disabled="isLoading" ng-click="changePageIndex(page)" class="paginate-number" ng-if="showPaginateNumber(page)"
                 ng-class="{'current':page===pageIndex}">{{page+1}}</md-button>
