@@ -101,7 +101,7 @@
     </div>
 </div>
 
-<div ng-show="paging" class="tw-ui-table-pagination">
+<div ng-show="paging" class="tw-ui-table-pagination" ng-show="pageType=='number'">
     <div class="paginate-section">
         <label>Rows per page:</label>
         <md-select ng-model="pageSize" ng-change="onPageSizeChanged($event)" aria-label="on change page size" ng-disabled="isLoading"
@@ -120,7 +120,7 @@
         <md-button class="md-icon-button" ng-click="previousPage()" ng-disabled="isLoading || pageIndex===0">
             <md-icon md-font-set="material-icons">keyboard_arrow_left</md-icon>
         </md-button>
-        <div class="page-indicator" ng-repeat="page in getPages()">
+        <div class="page-indicator" ng-repeat="page in getPages()" ng-show="pageType=='number'" >
             <span class="paginate-symbol" ng-if="showPaginateSymbol(page)">...</span>
             <md-button ng-disabled="isLoading" ng-click="changePageIndex(page)" class="paginate-number" ng-if="showPaginateNumber(page)"
                 ng-class="{'current':page===pageIndex}">{{page+1}}</md-button>
