@@ -108,11 +108,11 @@
             class="md-no-underline">
             <md-option value="20">20</md-option>
             <md-option value="50">50</md-option>
-            <md-option ng-value="totalCount">All</md-option>
+            <md-option ng-if="totalCount && totalCount>0" ng-value="totalCount">All</md-option>
         </md-select>
     </div>
 
-    <div class="paginate-section">
+    <div class="paginate-section" ng-show="pageType=='number'">
         <span>{{pageIndex*pageSize+1}} - {{ Math.min((pageIndex+1)*pageSize,totalCount) }} of {{totalCount}}</span>
     </div>
 
