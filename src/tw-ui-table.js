@@ -160,7 +160,7 @@
                         pages.push(pageCount - 1);
                     }
                 } else {
-                    var pageCount = $scope.data.length==$scope.pageSize?$scope.pageIndex+1:$scope.pageIndex;
+                    var pageCount = ($scope.data && $scope.data.length==$scope.pageSize)?$scope.pageIndex+1:$scope.pageIndex;
                     for(var i=1; i<pageCount-1; i++) {
                         pages.push(i);
                     }
